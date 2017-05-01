@@ -1,0 +1,4722 @@
+[
+  {
+    "name": "Bundler/DuplicatedGem",
+    "department": "Bundler",
+    "description": "A Gem's requirements should be listed only once in a Gemfile.",
+    "examples": {
+      "bad": [
+        "gem 'rubocop'\ngem 'rubocop'\n\ngroup :development do\n  gem 'rubocop'\nend\n\ngroup :test do\n  gem 'rubocop'\nend\n\n"
+      ],
+      "good": [
+        "group :development, :test do\n  gem 'rubocop'\nend\n\ngem 'rubocop', groups: [:development, :test]"
+      ]
+    },
+    "pars": {
+      "Include": [
+        "**/Gemfile",
+        "**/gems.rb"
+      ]
+    },
+    "config": {
+      "Description": "Checks for duplicate gem entries in Gemfile.",
+      "Enabled": true,
+      "Include": [
+        "**/Gemfile",
+        "**/gems.rb"
+      ]
+    }
+  },
+  {
+    "name": "Bundler/OrderedGems",
+    "department": "Bundler",
+    "description": "Gems should be alphabetically sorted within groups.",
+    "examples": {
+      "bad": [
+        "gem 'rubocop'\ngem 'rspec'\n\n"
+      ],
+      "good": [
+        "gem 'rspec'\ngem 'rubocop'\n\ngem 'rubocop'\n\ngem 'rspec'\n\n# For code quality\ngem 'rubocop'\n# For tests\ngem 'rspec'"
+      ]
+    },
+    "pars": {
+      "Include": [
+        "**/Gemfile",
+        "**/gems.rb"
+      ],
+      "TreatCommentsAsGroupSeparators": true
+    },
+    "config": {
+      "Description": "Gems within groups in the Gemfile should be alphabetically sorted.",
+      "Enabled": true,
+      "Include": [
+        "**/Gemfile",
+        "**/gems.rb"
+      ],
+      "TreatCommentsAsGroupSeparators": true
+    }
+  },
+  {
+    "name": "Layout/AlignHash",
+    "department": "Layout",
+    "description": "Check that the keys, separators, and values of a multi-line hash\nliteral are aligned according to configuration. The configuration\noptions are:\n\n  - key (left align keys)\n  - separator (align hash rockets and colons, right align keys)\n  - table (left align keys, hash rockets, and values)\n\nThe treatment of hashes passed as the last argument to a method call\ncan also be configured. The options are:\n\n  - always_inspect\n  - always_ignore\n  - ignore_implicit (without curly braces)\n  - ignore_explicit (with curly braces)",
+    "examples": {
+      "good": [
+        "{\n  foo: bar,\n  ba: baz\n}\n{\n  :foo => bar,\n  :ba => baz\n}\n\n"
+      ],
+      "bad": [
+        "{\n  foo: bar,\n   ba: baz\n}\n{\n  :foo => bar,\n   :ba => baz\n}"
+      ]
+    },
+    "pars": {
+      "EnforcedHashRocketStyle": "key",
+      "SupportedHashRocketStyles": [
+        "key",
+        "separator",
+        "table"
+      ],
+      "EnforcedColonStyle": "key",
+      "SupportedColonStyles": [
+        "key",
+        "separator",
+        "table"
+      ],
+      "EnforcedLastArgumentHashStyle": "always_inspect",
+      "SupportedLastArgumentHashStyles": [
+        "always_inspect",
+        "always_ignore",
+        "ignore_implicit",
+        "ignore_explicit"
+      ]
+    },
+    "config": {
+      "Description": "Align the elements of a hash literal if they span more than one line.",
+      "Enabled": true,
+      "EnforcedHashRocketStyle": "key",
+      "SupportedHashRocketStyles": [
+        "key",
+        "separator",
+        "table"
+      ],
+      "EnforcedColonStyle": "key",
+      "SupportedColonStyles": [
+        "key",
+        "separator",
+        "table"
+      ],
+      "EnforcedLastArgumentHashStyle": "always_inspect",
+      "SupportedLastArgumentHashStyles": [
+        "always_inspect",
+        "always_ignore",
+        "ignore_implicit",
+        "ignore_explicit"
+      ]
+    }
+  },
+  {
+    "name": "Layout/AlignParameters",
+    "department": "Layout",
+    "description": "Here we check if the parameters on a multi-line method call or\ndefinition are aligned.",
+    "examples": {
+      "good": [
+        "\nfoo :bar,\n    :baz\n\n\nfoo :bar,\n  :baz\n\n"
+      ],
+      "bad": [
+        "\nfoo :bar,\n  :baz\nfoo :bar,\n    :baz"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "with_first_parameter",
+      "SupportedStyles": [
+        "with_first_parameter",
+        "with_fixed_indentation"
+      ],
+      "IndentationWidth": null
+    },
+    "config": {
+      "Description": "Align the parameters of a method call if they span more than one line.",
+      "StyleGuide": "#no-double-indent",
+      "Enabled": true,
+      "EnforcedStyle": "with_first_parameter",
+      "SupportedStyles": [
+        "with_first_parameter",
+        "with_fixed_indentation"
+      ],
+      "IndentationWidth": null
+    }
+  },
+  {
+    "name": "Layout/BlockEndNewline",
+    "department": "Layout",
+    "description": "This cop checks whether the end statement of a do..end block\nis on its own line.",
+    "examples": {
+      "bad": [
+        "blah do |i|\n  foo(i) end\n\nblah { |i|\n  foo(i) }\n\n"
+      ],
+      "good": [
+        "blah do |i|\n  foo(i)\nend\n\nblah { |i|\n  foo(i)\n}"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Put end statement of multiline block on its own line.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Layout/ClosingParenthesisIndentation",
+    "department": "Layout",
+    "description": "This cops checks the indentation of hanging closing parentheses in\nmethod calls, method definitions, and grouped expressions. A hanging\nclosing parenthesis means `)` preceded by a line break.",
+    "examples": {
+      "good": [
+        "func(\n  x,\n  y\n)\n\na = b * (x +\n         y\n        )\n\n"
+      ],
+      "bad": [
+        "def func(\n  x,\n  y\n  )"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks the indentation of hanging closing parentheses.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Layout/EmptyLineAfterMagicComment",
+    "department": "Layout",
+    "description": "Checks for a newline after the final magic comment.",
+    "examples": {
+      "good": [
+        "# frozen_string_literal: true\n\n# Some documentation for Person\nclass Person\n  # Some code\nend\n\n"
+      ],
+      "bad": [
+        "# frozen_string_literal: true\n# Some documentation for Person\nclass Person\n  # Some code\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Add an empty line after magic comments to separate them from code.",
+      "StyleGuide": "#separate-magic-comments-from-code",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Layout/EmptyLineBetweenDefs",
+    "department": "Layout",
+    "description": "This cop checks whether method definitions are\nseparated by one empty line.\n\n`NumberOfEmptyLines` can be and integer (e.g. 1 by default) or\nan array (e.g. [1, 2]) to specificy a minimum and a maximum of\nempty lines.\n\n`AllowAdjacentOneLineDefs` can be used to configure is adjacent\none line methods definitions are an offense",
+    "examples": {
+      "bad": [
+        "def a\nend\ndef b\nend"
+      ],
+      "good": [
+        "def a\nend\n\ndef b\nend"
+      ]
+    },
+    "pars": {
+      "AllowAdjacentOneLineDefs": false,
+      "NumberOfEmptyLines": 1
+    },
+    "config": {
+      "Description": "Use empty lines between defs.",
+      "StyleGuide": "#empty-lines-between-methods",
+      "Enabled": true,
+      "AllowAdjacentOneLineDefs": false,
+      "NumberOfEmptyLines": 1
+    }
+  },
+  {
+    "name": "Layout/EmptyLinesAroundBeginBody",
+    "department": "Layout",
+    "description": "This cops checks if empty lines exist around the bodies of begin-end\nblocks.",
+    "examples": {
+      "good": [
+        "\nbegin\n  ...\nend\n\n"
+      ],
+      "bad": [
+        "\nbegin\n\n  ...\n\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Keeps track of empty lines around begin-end bodies.",
+      "StyleGuide": "#empty-lines-around-bodies",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Layout/EmptyLinesAroundBlockBody",
+    "department": "Layout",
+    "description": "This cops checks if empty lines around the bodies of blocks match\nthe configuration.",
+    "examples": {
+      "good": [
+        "\nfoo do |bar|\n\n  ...\n\nend\n\n# EnforcedStyle: no_empty_lines\n\n\nfoo do |bar|\n  ...\nend"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "no_empty_lines",
+      "SupportedStyles": [
+        "empty_lines",
+        "no_empty_lines"
+      ]
+    },
+    "config": {
+      "Description": "Keeps track of empty lines around block bodies.",
+      "StyleGuide": "#empty-lines-around-bodies",
+      "Enabled": true,
+      "EnforcedStyle": "no_empty_lines",
+      "SupportedStyles": [
+        "empty_lines",
+        "no_empty_lines"
+      ]
+    }
+  },
+  {
+    "name": "Layout/EmptyLinesAroundClassBody",
+    "department": "Layout",
+    "description": "This cops checks if empty lines around the bodies of classes match\nthe configuration.",
+    "examples": {
+      "good": [
+        "\nclass Foo\n\n   def bar\n     ...\n   end\n\nend"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "no_empty_lines",
+      "SupportedStyles": [
+        "empty_lines",
+        "empty_lines_except_namespace",
+        "empty_lines_special",
+        "no_empty_lines"
+      ]
+    },
+    "config": {
+      "Description": "Keeps track of empty lines around class bodies.",
+      "StyleGuide": "#empty-lines-around-bodies",
+      "Enabled": true,
+      "EnforcedStyle": "no_empty_lines",
+      "SupportedStyles": [
+        "empty_lines",
+        "empty_lines_except_namespace",
+        "empty_lines_special",
+        "no_empty_lines"
+      ]
+    }
+  },
+  {
+    "name": "Layout/EmptyLinesAroundExceptionHandlingKeywords",
+    "department": "Layout",
+    "description": "This cops checks if empty lines exist around the bodies of `begin`\nsections. This cop doesn't check empty lines at `begin` body\nbeginning/end and around method definition body.\n`Style/EmptyLinesAroundBeginBody` or `Style/EmptyLinesAroundMethodBody`\ncan be used for this purpose.",
+    "examples": {
+      "good": [
+        "\nbegin\n  do_something\nrescue\n  do_something2\nelse\n  do_something3\nensure\n  do_something4\nend\n\n\ndef foo\n  do_something\nrescue\n  do_something2\nend\n\n"
+      ],
+      "bad": [
+        "\nbegin\n  do_something\n\nrescue\n\n  do_something2\n\nelse\n\n  do_something3\n\nensure\n\n  do_something4\nend\n\n\ndef foo\n  do_something\n\nrescue\n\n  do_something2\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Keeps track of empty lines around exception handling keywords.",
+      "StyleGuide": "#empty-lines-around-bodies",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Layout/EmptyLinesAroundMethodBody",
+    "department": "Layout",
+    "description": "This cops checks if empty lines exist around the bodies of methods.",
+    "examples": {
+      "good": [
+        "\ndef foo\n  ...\nend\n\n"
+      ],
+      "bad": [
+        "\ndef bar\n\n  ...\n\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Keeps track of empty lines around method bodies.",
+      "StyleGuide": "#empty-lines-around-bodies",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Layout/EmptyLinesAroundModuleBody",
+    "department": "Layout",
+    "description": "This cops checks if empty lines around the bodies of modules match\nthe configuration.",
+    "examples": {
+      "good": [
+        "\nmodule Foo\n\n  def bar\n    ...\n  end\n\nend\n\nEnforcedStyle: no_empty_lines\n\n\nmodule Foo\n  def bar\n    ...\n  end\nend"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "no_empty_lines",
+      "SupportedStyles": [
+        "empty_lines",
+        "empty_lines_except_namespace",
+        "empty_lines_special",
+        "no_empty_lines"
+      ]
+    },
+    "config": {
+      "Description": "Keeps track of empty lines around module bodies.",
+      "StyleGuide": "#empty-lines-around-bodies",
+      "Enabled": true,
+      "EnforcedStyle": "no_empty_lines",
+      "SupportedStyles": [
+        "empty_lines",
+        "empty_lines_except_namespace",
+        "empty_lines_special",
+        "no_empty_lines"
+      ]
+    }
+  },
+  {
+    "name": "Layout/ExtraSpacing",
+    "department": "Layout",
+    "description": "This cop checks for extra/unnecessary whitespace.",
+    "examples": {
+      "good": [
+        "name      = \"RuboCop\"\n# Some comment and an empty line\n\nwebsite  += \"/bbatsov/rubocop\" unless cond\nputs        \"rubocop\"          if     debug\n\n"
+      ],
+      "bad": [
+        "set_app(\"RuboCop\")\nwebsite  = \"https://github.com/bbatsov/rubocop\""
+      ]
+    },
+    "pars": {
+      "AllowForAlignment": true,
+      "ForceEqualSignAlignment": false
+    },
+    "config": {
+      "Description": "Do not use unnecessary spacing.",
+      "Enabled": true,
+      "AllowForAlignment": true,
+      "ForceEqualSignAlignment": false
+    }
+  },
+  {
+    "name": "Layout/FirstArrayElementLineBreak",
+    "department": "Layout",
+    "description": "This cop checks for a line break before the first element in a\nmulti-line array.",
+    "examples": {
+      "bad": [
+        "[ :a,\n  :b]\n\n"
+      ],
+      "good": [
+        "[\n  :a,\n  :b]"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for a line break before the first element in a multi-line array.",
+      "Enabled": false
+    }
+  },
+  {
+    "name": "Layout/FirstHashElementLineBreak",
+    "department": "Layout",
+    "description": "This cop checks for a line break before the first element in a\nmulti-line hash.",
+    "examples": {
+      "bad": [
+        "{ a: 1,\n  b: 2}\n\n"
+      ],
+      "good": [
+        "{\n  a: 1,\n  b: 2 }"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for a line break before the first element in a multi-line hash.",
+      "Enabled": false
+    }
+  },
+  {
+    "name": "Layout/FirstMethodArgumentLineBreak",
+    "department": "Layout",
+    "description": "This cop checks for a line break before the first argument in a\nmulti-line method call.",
+    "examples": {
+      "bad": [
+        "method(foo, bar,\n  baz)\n\n"
+      ],
+      "good": [
+        "method(\n  foo, bar,\n  baz)\n\n# ignored\nmethod foo, bar,\n  baz"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for a line break before the first argument in a multi-line method call.",
+      "Enabled": false
+    }
+  },
+  {
+    "name": "Layout/FirstMethodParameterLineBreak",
+    "department": "Layout",
+    "description": "This cop checks for a line break before the first parameter in a\nmulti-line method parameter definition.",
+    "examples": {
+      "bad": [
+        "def method(foo, bar,\n    baz)\n  do_something\nend\n\n"
+      ],
+      "good": [
+        "def method(\n    foo, bar,\n    baz)\n  do_something\nend\n\n# ignored\ndef method foo,\n    bar\n  do_something\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for a line break before the first parameter in a multi-line method parameter definition.",
+      "Enabled": false
+    }
+  },
+  {
+    "name": "Layout/FirstParameterIndentation",
+    "department": "Layout",
+    "description": "This cop checks the indentation of the first parameter in a method call.\nParameters after the first one are checked by Style/AlignParameters, not\nby this cop.",
+    "examples": {
+      "bad": [
+        "some_method(\nfirst_param,\nsecond_param)\n\n"
+      ],
+      "good": [
+        "some_method(\n  first_param,\nsecond_param)"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "special_for_inner_method_call_in_parentheses",
+      "SupportedStyles": [
+        "consistent",
+        "special_for_inner_method_call",
+        "special_for_inner_method_call_in_parentheses"
+      ],
+      "IndentationWidth": null
+    },
+    "config": {
+      "Description": "Checks the indentation of the first parameter in a method call.",
+      "Enabled": true,
+      "EnforcedStyle": "special_for_inner_method_call_in_parentheses",
+      "SupportedStyles": [
+        "consistent",
+        "special_for_inner_method_call",
+        "special_for_inner_method_call_in_parentheses"
+      ],
+      "IndentationWidth": null
+    }
+  },
+  {
+    "name": "Layout/IndentAssignment",
+    "department": "Layout",
+    "description": "This cop checks the indentation of the first line of the\nright-hand-side of a multi-line assignment.\n\nThe indentation of the remaining lines can be corrected with\nother cops such as `IndentationConsistency` and `EndAlignment`.",
+    "examples": {
+      "bad": [
+        "value =\nif foo\n  'bar'\nend\n\n"
+      ],
+      "good": [
+        "value =\n  if foo\n    'bar'\n  end"
+      ]
+    },
+    "pars": {
+      "IndentationWidth": null
+    },
+    "config": {
+      "Description": "Checks the indentation of the first line of the right-hand-side of a multi-line assignment.",
+      "Enabled": true,
+      "IndentationWidth": null
+    }
+  },
+  {
+    "name": "Layout/IndentHeredoc",
+    "department": "Layout",
+    "description": "This cops checks the indentation of the here document bodies. The bodies\nare indented one step.\nIn Ruby 2.3 or newer, squiggly heredocs (`<<~`) should be used. If you\nuse the older rubies, you should introduce some library to your project\n(e.g. ActiveSupport, Powerpack or Unindent).",
+    "examples": {
+      "bad": [
+        "<<-END\nsomething\nEND\n\n"
+      ],
+      "good": [
+        "# When EnforcedStyle is squiggly, bad code is auto-corrected to the\n# following code.\n<<~END\n  something\nEND\n\n# When EnforcedStyle is active_support, bad code is auto-corrected to\n# the following code.\n<<-END.strip_heredoc\n  something\nEND"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "auto_detection",
+      "SupportedStyles": [
+        "auto_detection",
+        "squiggly",
+        "active_support",
+        "powerpack",
+        "unindent"
+      ]
+    },
+    "config": {
+      "Description": "This cops checks the indentation of the here document bodies.",
+      "StyleGuide": "#squiggly-heredocs",
+      "Enabled": true,
+      "EnforcedStyle": "auto_detection",
+      "SupportedStyles": [
+        "auto_detection",
+        "squiggly",
+        "active_support",
+        "powerpack",
+        "unindent"
+      ]
+    }
+  },
+  {
+    "name": "Layout/IndentationWidth",
+    "department": "Layout",
+    "description": "This cops checks for indentation that doesn't use the specified number\nof spaces.\n\nSee also the IndentationConsistency cop which is the companion to this\none.",
+    "examples": {
+      "bad": [
+        "class A\n def test\n  puts 'hello'\n end\nend\n\n       IgnoredPatterns:\n         - '^\\s*module'\nmodule A\nclass B\n  def test\n  puts 'hello'\n  end\nend\nend\n\n"
+      ],
+      "good": [
+        "class A\n  def test\n    puts 'hello'\n  end\nend\n\n        IgnoredPatterns:\n          - '^\\s*module'\nmodule A\nclass B\n  def test\n    puts 'hello'\n  end\nend\nend"
+      ]
+    },
+    "pars": {
+      "Width": 2,
+      "IgnoredPatterns": [
+
+      ]
+    },
+    "config": {
+      "Description": "Use 2 spaces for indentation.",
+      "StyleGuide": "#spaces-indentation",
+      "Enabled": true,
+      "Width": 2,
+      "IgnoredPatterns": [
+
+      ]
+    }
+  },
+  {
+    "name": "Layout/MultilineAssignmentLayout",
+    "department": "Layout",
+    "description": "This cop checks whether the multiline assignments have a newline\nafter the assignment operator.",
+    "examples": {
+      "bad": [
+        "foo = if expression\n  'bar'\nend\n\n"
+      ],
+      "good": [
+        "foo = if expression\n  'bar'\nend\n\nfoo =\n  if expression\n    'bar'\n  end\n\nfoo =\n  begin\n    compute\n  rescue => e\n    nil\n  end"
+      ]
+    },
+    "pars": {
+      "SupportedTypes": [
+        "block",
+        "case",
+        "class",
+        "if",
+        "kwbegin",
+        "module"
+      ],
+      "EnforcedStyle": "new_line",
+      "SupportedStyles": [
+        "same_line",
+        "new_line"
+      ]
+    },
+    "config": {
+      "Description": "Check for a newline after the assignment operator in multi-line assignments.",
+      "StyleGuide": "#indent-conditional-assignment",
+      "Enabled": false,
+      "SupportedTypes": [
+        "block",
+        "case",
+        "class",
+        "if",
+        "kwbegin",
+        "module"
+      ],
+      "EnforcedStyle": "new_line",
+      "SupportedStyles": [
+        "same_line",
+        "new_line"
+      ]
+    }
+  },
+  {
+    "name": "Layout/MultilineBlockLayout",
+    "department": "Layout",
+    "description": "This cop checks whether the multiline do end blocks have a newline\nafter the start of the block. Additionally, it checks whether the block\narguments, if any, are on the same line as the start of the block.",
+    "examples": {
+      "bad": [
+        "blah do |i| foo(i)\n  bar(i)\nend\n\nblah do\n  |i| foo(i)\n  bar(i)\nend\n\nblah { |i| foo(i)\n  bar(i)\n}\n\n"
+      ],
+      "good": [
+        "blah do |i|\n  foo(i)\n  bar(i)\nend\n\nblah { |i|\n  foo(i)\n  bar(i)\n}"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Ensures newlines after multiline block do statements.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Layout/MultilineMethodCallIndentation",
+    "department": "Layout",
+    "description": "This cop checks the indentation of the method name part in method calls\nthat span more than one line.",
+    "examples": {
+      "bad": [
+        "while myvariable\n.b\n  # do something\nend\n\n"
+      ],
+      "good": [
+        "while myvariable\n      .b\n  # do something\nend\n\nThing.a\n     .b\n     .c\n\n        IndentationWidth: 2\nwhile myvariable\n  .b\n\n  # do something\nend\n\n        IndentationWidth: 2\nwhile myvariable\n        .a\n        .b\n\n  # do something\nend\n\n        IndentationWidth: 2\nmyvariable = Thing\n               .a\n               .b\n               .c"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "aligned",
+      "SupportedStyles": [
+        "aligned",
+        "indented",
+        "indented_relative_to_receiver"
+      ],
+      "IndentationWidth": null
+    },
+    "config": {
+      "Description": "Checks indentation of method calls with the dot operator that span more than one line.",
+      "Enabled": true,
+      "EnforcedStyle": "aligned",
+      "SupportedStyles": [
+        "aligned",
+        "indented",
+        "indented_relative_to_receiver"
+      ],
+      "IndentationWidth": null
+    }
+  },
+  {
+    "name": "Layout/MultilineOperationIndentation",
+    "department": "Layout",
+    "description": "This cop checks the indentation of the right hand side operand in\nbinary operations that span more than one line.",
+    "examples": {
+      "bad": [
+        "if a +\nb\n  something\nend"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "aligned",
+      "SupportedStyles": [
+        "aligned",
+        "indented"
+      ],
+      "IndentationWidth": null
+    },
+    "config": {
+      "Description": "Checks indentation of binary operations that span more than one line.",
+      "Enabled": true,
+      "EnforcedStyle": "aligned",
+      "SupportedStyles": [
+        "aligned",
+        "indented"
+      ],
+      "IndentationWidth": null
+    }
+  },
+  {
+    "name": "Layout/RescueEnsureAlignment",
+    "department": "Layout",
+    "description": "This cop checks whether the rescue and ensure keywords are aligned\nproperly.",
+    "examples": {
+      "bad": [
+        "begin\n  something\n  rescue\n  puts 'error'\nend\n\n"
+      ],
+      "good": [
+        "begin\n  something\nrescue\n  puts 'error'\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Align rescues and ensures correctly.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Layout/SpaceAfterMethodName",
+    "department": "Layout",
+    "description": "Checks for space between a method name and a left parenthesis in defs.",
+    "examples": {
+      "bad": [
+        "def func (x) ... end\n\n"
+      ],
+      "good": [
+        "def func(x) ... end"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Do not put a space between a method name and the opening parenthesis in a method definition.",
+      "StyleGuide": "#parens-no-spaces",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Layout/SpaceAfterNot",
+    "department": "Layout",
+    "description": "This cop checks for space after `!`.",
+    "examples": {
+      "bad": [
+        "! something\n\n"
+      ],
+      "good": [
+        "!something"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Tracks redundant space after the ! operator.",
+      "StyleGuide": "#no-space-bang",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Layout/SpaceAroundBlockParameters",
+    "department": "Layout",
+    "description": "Checks the spacing inside and after block parameters pipes.",
+    "examples": {
+      "bad": [
+        "{}.each { | x,  y |puts x }\n\n"
+      ],
+      "good": [
+        "{}.each { |x, y| puts x }"
+      ]
+    },
+    "pars": {
+      "EnforcedStyleInsidePipes": "no_space",
+      "SupportedStylesInsidePipes": [
+        "space",
+        "no_space"
+      ]
+    },
+    "config": {
+      "Description": "Checks the spacing inside and after block parameters pipes.",
+      "Enabled": true,
+      "EnforcedStyleInsidePipes": "no_space",
+      "SupportedStylesInsidePipes": [
+        "space",
+        "no_space"
+      ]
+    }
+  },
+  {
+    "name": "Layout/SpaceAroundKeyword",
+    "department": "Layout",
+    "description": "Checks the spacing around the keywords.",
+    "examples": {
+      "bad": [
+        "something 'test'do|x|\nend\n\nwhile(something)\nend\n\nsomething = 123if test\n\n"
+      ],
+      "good": [
+        "something 'test' do |x|\nend\n\nwhile (something)\nend\n\nsomething = 123 if test"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use a space around keywords if appropriate.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Layout/SpaceBeforeFirstArg",
+    "department": "Layout",
+    "description": "Checks that exactly one space is used between a method name and the\nfirst argument for method calls without parentheses.\n\nAlternatively, extra spaces can be added to align the argument with\nsomething on a preceding or following line, if the AllowForAlignment\nconfig parameter is true.",
+    "examples": {
+      "bad": [
+        "something  x\nsomething   y, z\nsomething'hello'\n\n"
+      ],
+      "good": [
+        "something x\nsomething y, z\nsomething 'hello'"
+      ]
+    },
+    "pars": {
+      "AllowForAlignment": true
+    },
+    "config": {
+      "Description": "Checks that exactly one space is used between a method name and the first argument for method calls without parentheses.",
+      "Enabled": true,
+      "AllowForAlignment": true
+    }
+  },
+  {
+    "name": "Layout/SpaceInsideArrayPercentLiteral",
+    "department": "Layout",
+    "description": "Checks for unnecessary additional spaces inside array percent literals\n(i.e. %i/%w).",
+    "examples": {
+      "good": [
+        "%i(foo bar baz)\n\n"
+      ],
+      "bad": [
+        "%w(foo  bar  baz)"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "No unnecessary additional spaces between elements in %i/%w literals.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Layout/SpaceInsidePercentLiteralDelimiters",
+    "department": "Layout",
+    "description": "Checks for unnecessary additional spaces inside the delimiters of\n%i/%w/%x literals.",
+    "examples": {
+      "good": [
+        "%i(foo bar baz)\n\n"
+      ],
+      "bad": [
+        "%w( foo bar baz )\n\n%x(  ls -l )"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "No unnecessary spaces inside delimiters of %i/%w/%x literals.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Layout/SpaceInsideRangeLiteral",
+    "department": "Layout",
+    "description": "Checks for spaces inside range literals.",
+    "examples": {
+      "bad": [
+        "1 .. 3\n\n'a' .. 'z'\n\n"
+      ],
+      "good": [
+        "1..3\n\n'a'..'z'"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "No spaces inside range literals.",
+      "StyleGuide": "#no-space-inside-range-literals",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/AmbiguousBlockAssociation",
+    "department": "Lint",
+    "description": "This cop checks for ambiguous block association with method\nwhen param passed without parentheses.",
+    "examples": {
+      "bad": [
+        "some_method a { |val| puts val }"
+      ],
+      "good": [
+        "# With parentheses, there's no ambiguity.\nsome_method(a) { |val| puts val }\n\n# Operator methods require no disambiguation\nfoo == bar { |b| b.baz }\n\n# Lambda arguments require no disambiguation\nfoo = ->(bar) { bar.baz }"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for ambiguous block association with method when param passed without parentheses.",
+      "StyleGuide": "#syntax",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/AmbiguousOperator",
+    "department": "Lint",
+    "description": "This cop checks for ambiguous operators in the first argument of a\nmethod invocation without parentheses.",
+    "examples": {
+      "bad": [
+        "\n# The `*` is interpreted as a splat operator but it could possibly be\n# a `*` method invocation (i.e. `do_something.*(some_array)`).\ndo_something *some_array"
+      ],
+      "good": [
+        "\n# With parentheses, there's no ambiguity.\ndo_something(*some_array)"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for ambiguous operators in the first argument of a method invocation without parentheses.",
+      "StyleGuide": "#method-invocation-parens",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/AmbiguousRegexpLiteral",
+    "department": "Lint",
+    "description": "This cop checks for ambiguous regexp literals in the first argument of\na method invocation without parentheses.",
+    "examples": {
+      "bad": [
+        "\n# This is interpreted as a method invocation with a regexp literal,\n# but it could possibly be `/` method invocations.\n# (i.e. `do_something./(pattern)./(i)`)\ndo_something /pattern/i"
+      ],
+      "good": [
+        "\n# With parentheses, there's no ambiguity.\ndo_something(/pattern/i)"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for ambiguous regexp literals in the first argument of a method invocation without parentheses.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/AssignmentInCondition",
+    "department": "Lint",
+    "description": "This cop checks for assignments in the conditions of\nif/while/until.",
+    "examples": {
+      "bad": [
+        "\nif some_var = true\n  do_something\nend"
+      ],
+      "good": [
+        "\nif some_var == true\n  do_something\nend"
+      ]
+    },
+    "pars": {
+      "AllowSafeAssignment": true
+    },
+    "config": {
+      "Description": "Don't use assignment in conditions.",
+      "StyleGuide": "#safe-assignment-in-condition",
+      "Enabled": true,
+      "AllowSafeAssignment": true
+    }
+  },
+  {
+    "name": "Lint/BlockAlignment",
+    "department": "Lint",
+    "description": "This cop checks whether the end keywords are aligned properly for do\nend blocks.\n\nThree modes are supported through the `EnforcedStyleAlignWith`\nconfiguration parameter:\n\n`start_of_block` : the `end` shall be aligned with the\nstart of the line where the `do` appeared.\n\n`start_of_line` : the `end` shall be aligned with the\nstart of the line where the expression started.\n\n`either` (which is the default) : the `end` is allowed to be in either\nlocation. The autofixer will default to `start_of_line`.",
+    "examples": {
+      "bad": [
+        "\nfoo.bar\n   .each do\n     baz\n       end"
+      ],
+      "good": [
+        "\nvariable = lambda do |i|\n  i\nend\nfoo.bar\n  .each do\n     baz\n   end\nfoo.bar\n  .each do\n     baz\nend"
+      ]
+    },
+    "pars": {
+      "EnforcedStyleAlignWith": "either",
+      "SupportedStylesAlignWith": [
+        "either",
+        "start_of_block",
+        "start_of_line"
+      ]
+    },
+    "config": {
+      "Description": "Align block ends correctly.",
+      "Enabled": true,
+      "EnforcedStyleAlignWith": "either",
+      "SupportedStylesAlignWith": [
+        "either",
+        "start_of_block",
+        "start_of_line"
+      ]
+    }
+  },
+  {
+    "name": "Lint/CircularArgumentReference",
+    "department": "Lint",
+    "description": "This cop checks for circular argument references in optional keyword\narguments and optional ordinal arguments.\n\nThis cop mirrors a warning produced by MRI since 2.2.",
+    "examples": {
+      "bad": [
+        "\ndef bake(pie: pie)\n  pie.heat_up\nend\ndef cook(dry_ingredients = dry_ingredients)\n  dry_ingredients.reduce(&:+)\nend"
+      ],
+      "good": [
+        "\ndef bake(pie:)\n  pie.refrigerate\nend\ndef bake(pie: self.pie)\n  pie.feed_to(user)\nend\ndef cook(dry_ingredients = self.dry_ingredients)\n  dry_ingredients.combine\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Default values in optional keyword arguments and optional ordinal arguments should not refer back to the name of the argument.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/ConditionPosition",
+    "department": "Lint",
+    "description": "This cop checks for conditions that are not on the same line as\nif/while/until.",
+    "examples": {
+      "bad": [
+        "\nif\n  some_condition\n  do_something\nend"
+      ],
+      "good": [
+        "\nif some_condition\n  do_something\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for condition placed in a confusing position relative to the keyword.",
+      "StyleGuide": "#same-line-condition",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/Debugger",
+    "department": "Lint",
+    "description": "This cop checks for calls to debugger or pry.",
+    "examples": {
+      "bad": [
+        "\n# using pry\ndef some_method\n  binding.pry\n  do_something\nend\n# using byebug\ndef some_method\n  byebug\n  do_something\nend"
+      ],
+      "good": [
+        "\ndef some_method\n  do_something\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Check for debugger calls.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/DefEndAlignment",
+    "department": "Lint",
+    "description": "This cop checks whether the end keywords of method definitions are\naligned properly.\n\nTwo modes are supported through the EnforcedStyleAlignWith configuration\nparameter. If it's set to `start_of_line` (which is the default), the\n`end` shall be aligned with the start of the line where the `def`\nkeyword is. If it's set to `def`, the `end` shall be aligned with the\n`def` keyword.",
+    "examples": {
+      "bad": [
+        "\nprivate def foo\n            end"
+      ],
+      "good": [
+        "\nprivate def foo\nend\nprivate def foo\n        end"
+      ]
+    },
+    "pars": {
+      "EnforcedStyleAlignWith": "start_of_line",
+      "SupportedStylesAlignWith": [
+        "start_of_line",
+        "def"
+      ],
+      "AutoCorrect": false
+    },
+    "config": {
+      "Description": "Align ends corresponding to defs correctly.",
+      "Enabled": true,
+      "EnforcedStyleAlignWith": "start_of_line",
+      "SupportedStylesAlignWith": [
+        "start_of_line",
+        "def"
+      ],
+      "AutoCorrect": false
+    }
+  },
+  {
+    "name": "Lint/DeprecatedClassMethods",
+    "department": "Lint",
+    "description": "This cop checks for uses of the deprecated class method usages.",
+    "examples": {
+      "bad": [
+        "\nFile.exists?(some_path)"
+      ],
+      "good": [
+        "\nFile.exist?(some_path)"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Check for deprecated class method calls.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/DuplicateCaseCondition",
+    "department": "Lint",
+    "description": "This cop checks that there are no repeated conditions\nused in case 'when' expressions.",
+    "examples": {
+      "bad": [
+        "\ncase x\nwhen 'first'\n  do_something\nwhen 'first'\n  do_something_else\nend"
+      ],
+      "good": [
+        "\ncase x\nwhen 'first'\n  do_something\nwhen 'second'\n  do_something_else\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Do not repeat values in case conditionals.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/DuplicateMethods",
+    "department": "Lint",
+    "description": "This cop checks for duplicated instance (or singleton) method\ndefinitions.",
+    "examples": {
+      "bad": [
+        "\ndef duplicated\n  1\nend\n\ndef duplicated\n  2\nend"
+      ],
+      "good": [
+        "\ndef duplicated\n  1\nend\n\ndef other_duplicated\n  2\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Check for duplicate method definitions.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/DuplicatedKey",
+    "department": "Lint",
+    "description": "This cop checks for duplicated keys in hash literals.\n\nThis cop mirrors a warning in Ruby 2.2.",
+    "examples": {
+      "bad": [
+        "\nhash = { food: 'apple', food: 'orange' }"
+      ],
+      "good": [
+        "\nhash = { food: 'apple', other_food: 'orange' }"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Check for duplicate keys in hash literals.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/EachWithObjectArgument",
+    "department": "Lint",
+    "description": "This cop checks if each_with_object is called with an immutable\nargument. Since the argument is the object that the given block shall\nmake calls on to build something based on the enumerable that\neach_with_object iterates over, an immutable argument makes no sense.\nIt's definitely a bug.",
+    "examples": {
+      "bad": [
+        "\nsum = numbers.each_with_object(0) { |e, a| a += e }"
+      ],
+      "good": [
+        "\nnum = 0\nsum = numbers.each_with_object(num) { |e, a| a += e }"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Check for immutable argument given to each_with_object.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/ElseLayout",
+    "department": "Lint",
+    "description": "This cop checks for odd else block layout - like\nhaving an expression on the same line as the else keyword,\nwhich is usually a mistake.",
+    "examples": {
+      "bad": [
+        "\nif something\n  ...\nelse do_this\n  do_that\nend"
+      ],
+      "good": [
+        "\nif something\n  ...\nelse\n  do_this\n  do_that\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Check for odd code arrangement in an else block.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/EmptyEnsure",
+    "department": "Lint",
+    "description": "This cop checks for empty `ensure` blocks",
+    "examples": {
+      "bad": [
+        "\ndef some_method\n  do_something\nensure\nend\nbegin\n  do_something\nensure\nend"
+      ],
+      "good": [
+        "\ndef some_method\n  do_something\nensure\n  do_something_else\nend\nbegin\n  do_something\nensure\n  do_something_else\nend"
+      ]
+    },
+    "pars": {
+      "AutoCorrect": false
+    },
+    "config": {
+      "Description": "Checks for empty ensure block.",
+      "Enabled": true,
+      "AutoCorrect": false
+    }
+  },
+  {
+    "name": "Lint/EmptyExpression",
+    "department": "Lint",
+    "description": "This cop checks for the presence of empty expressions.",
+    "examples": {
+      "bad": [
+        "\nfoo = ()\nif ()\n  bar\nend"
+      ],
+      "good": [
+        "\nfoo = (some_expression)\nif (some_expression)\n  bar\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for empty expressions.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/EmptyInterpolation",
+    "department": "Lint",
+    "description": "This cop checks for empty interpolation.",
+    "examples": {
+      "bad": [
+        "\n\"result is #{}\""
+      ],
+      "good": [
+        "\n\"result is #{some_result}\""
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for empty string interpolation.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/EmptyWhen",
+    "department": "Lint",
+    "description": "This cop checks for the presence of `when` branches without a body.",
+    "examples": {
+      "bad": [
+        "\ncase foo\nwhen bar then 1\nwhen baz then # nothing\nend"
+      ],
+      "good": [
+        "\ncase foo\nwhen bar then 1\nwhen baz then 2\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for `when` branches with empty bodies.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/EndAlignment",
+    "department": "Lint",
+    "description": "This cop checks whether the end keywords are aligned properly.\n\nThree modes are supported through the `EnforcedStyleAlignWith`\nconfiguration parameter:\n\nIf it's set to `keyword` (which is the default), the `end`\nshall be aligned with the start of the keyword (if, class, etc.).\n\nIf it's set to `variable` the `end` shall be aligned with the\nleft-hand-side of the variable assignment, if there is one.\n\nIf it's set to `start_of_line`, the `end` shall be aligned with the\nstart of the line where the matching keyword appears.",
+    "examples": {
+      "bad": [
+        "\nvariable = if true\n    end"
+      ],
+      "good": [
+        "\nvariable = if true\n           end\nvariable = if true\nend\nputs(if true\nend)"
+      ]
+    },
+    "pars": {
+      "EnforcedStyleAlignWith": "keyword",
+      "SupportedStylesAlignWith": [
+        "keyword",
+        "variable",
+        "start_of_line"
+      ],
+      "AutoCorrect": false
+    },
+    "config": {
+      "Description": "Align ends correctly.",
+      "Enabled": true,
+      "EnforcedStyleAlignWith": "keyword",
+      "SupportedStylesAlignWith": [
+        "keyword",
+        "variable",
+        "start_of_line"
+      ],
+      "AutoCorrect": false
+    }
+  },
+  {
+    "name": "Lint/EndInMethod",
+    "department": "Lint",
+    "description": "This cop checks for END blocks in method definitions.",
+    "examples": {
+      "bad": [
+        "\ndef some_method\n  END { do_something }\nend"
+      ],
+      "good": [
+        "\ndef some_method\n  at_exit { do_something }\nend\n# outside defs\nEND { do_something }"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "END blocks should not be placed inside method definitions.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/EnsureReturn",
+    "department": "Lint",
+    "description": "This cop checks for *return* from an *ensure* block.",
+    "examples": {
+      "bad": [
+        "\nbegin\n  do_something\nensure\n  do_something_else\n  return\nend"
+      ],
+      "good": [
+        "\nbegin\n  do_something\nensure\n  do_something_else\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Do not use return in an ensure block.",
+      "StyleGuide": "#no-return-ensure",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/FloatOutOfRange",
+    "department": "Lint",
+    "description": "This cop identifies Float literals which are, like, really really really\nreally really really really really big. Too big. No-one needs Floats\nthat big. If you need a float that big, something is wrong with you.",
+    "examples": {
+      "bad": [
+        "\nfloat = 3.0e400"
+      ],
+      "good": [
+        "\nfloat = 42.9"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Catches floating-point literals too large or small for Ruby to represent.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/FormatParameterMismatch",
+    "department": "Lint",
+    "description": "This lint sees if there is a mismatch between the number of\nexpected fields for format/sprintf/#% and what is actually\npassed as arguments.",
+    "examples": {
+      "bad": [
+        "\nformat('A value: %s and another: %i', a_value)"
+      ],
+      "good": [
+        "\nformat('A value: %s and another: %i', a_value, another)"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "The number of parameters to format/sprint must match the fields.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/HandleExceptions",
+    "department": "Lint",
+    "description": "This cop checks for *rescue* blocks with no body.",
+    "examples": {
+      "bad": [
+        "\ndef some_method\n  do_something\nrescue\n  # do nothing\nend\nbegin\n  do_something\nrescue\n  # do nothing\nend"
+      ],
+      "good": [
+        "\ndef some_method\n  do_something\nrescue\n  handle_exception\nend\nbegin\n  do_something\nrescue\n  handle_exception\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Don't suppress exception.",
+      "StyleGuide": "#dont-hide-exceptions",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/ImplicitStringConcatenation",
+    "department": "Lint",
+    "description": "This cop checks for implicit string concatenation of string literals\nwhich are on the same line.",
+    "examples": {
+      "bad": [
+        "\narray = ['Item 1' 'Item 2']"
+      ],
+      "good": [
+        "\narray = ['Item 1Item 2']\narray = ['Item 1' + 'Item 2']\narray = [\n  'Item 1' \\\n  'Item 2'\n]"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for adjacent string literals on the same line, which could better be represented as a single string literal.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/IneffectiveAccessModifier",
+    "department": "Lint",
+    "description": "This cop checks for `private` or `protected` access modifiers which are\napplied to a singleton method. These access modifiers do not make\nsingleton methods private/protected. `private_class_method` can be\nused for that.",
+    "examples": {
+      "bad": [
+        "\nclass C\n  private\n\n  def self.method\n    puts 'hi'\n  end\nend"
+      ],
+      "good": [
+        "\nclass C\n  def self.method\n    puts 'hi'\n  end\n\n  private_class_method :method\nend\nclass C\n  class << self\n    private\n\n    def method\n      puts 'hi'\n    end\n  end\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for attempts to use `private` or `protected` to set the visibility of a class method, which does not work.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/InheritException",
+    "department": "Lint",
+    "description": "This cop looks for error classes inheriting from `Exception`\nand its standard library subclasses, excluding subclasses of\n`StandardError`. It is configurable to suggest using either\n`RuntimeError` (default) or `StandardError` instead.",
+    "examples": {
+      "bad": [
+        "\nclass C < Exception; end"
+      ],
+      "good": [
+        "\nclass C < RuntimeError; end\nclass C < StandardError; end"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "runtime_error",
+      "SupportedStyles": [
+        "runtime_error",
+        "standard_error"
+      ]
+    },
+    "config": {
+      "Description": "Avoid inheriting from the `Exception` class.",
+      "Enabled": true,
+      "EnforcedStyle": "runtime_error",
+      "SupportedStyles": [
+        "runtime_error",
+        "standard_error"
+      ]
+    }
+  },
+  {
+    "name": "Lint/InvalidCharacterLiteral",
+    "department": "Lint",
+    "description": "This cop checks for invalid character literals with a non-escaped\nwhitespace character (e.g. `? `).\nHowever, currently it's unclear whether there's a way to emit this\nwarning without syntax errors.\n\n    $ ruby -w\n    p(? )\n    -:1: warning: invalid character syntax; use ?\\s\n    -:1: syntax error, unexpected '?', expecting ')'\n    p(? )\n       ^",
+    "examples": {
+      "bad": [
+        "\np(? )"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for invalid character literals with a non-escaped whitespace character.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/LiteralInCondition",
+    "department": "Lint",
+    "description": "This cop checks for literals used as the conditions or as\noperands in and/or expressions serving as the conditions of\nif/while/until.",
+    "examples": {
+      "bad": [
+        "\nif 20\n  do_something\nend\nif some_var && true\n  do_something\nend"
+      ],
+      "good": [
+        "\nif some_var && some_condition\n  do_something\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks of literals used in conditions.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/LiteralInInterpolation",
+    "department": "Lint",
+    "description": "This cop checks for interpolated literals.",
+    "examples": {
+      "bad": [
+        "\n\"result is #{10}\""
+      ],
+      "good": [
+        "\n\"result is 10\""
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for literals used in interpolation.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/Loop",
+    "department": "Lint",
+    "description": "This cop checks for uses of *begin...end while/until something*.",
+    "examples": {
+      "bad": [
+        "\n# using while\nbegin\n  do_something\nend while some_condition\n# using until\nbegin\n  do_something\nend until some_condition"
+      ],
+      "good": [
+        "\n# using while\nwhile some_condition\n  do_something\nend\n# using until\nuntil some_condition\n  do_something\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use Kernel#loop with break rather than begin/end/until or begin/end/while for post-loop tests.",
+      "StyleGuide": "#loop-with-break",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/MultipleCompare",
+    "department": "Lint",
+    "description": "In math and Python, we can use `x < y < z` style comparison to compare\nmultiple value. However, we can't use the comparison in Ruby. However,\nthe comparison is not syntax error. This cop checks the bad usage of\ncomparison operators.",
+    "examples": {
+      "bad": [
+        "\nx < y < z\n10 <= x <= 20"
+      ],
+      "good": [
+        "\nx < y && y < z\n10 <= x && x <= 20"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `&&` operator to compare multiple value.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/NestedMethodDefinition",
+    "department": "Lint",
+    "description": "This cop checks for nested method definitions.",
+    "examples": {
+      "bad": [
+        "\n# `bar` definition actually produces methods in the same scope\n# as the outer `foo` method. Furthermore, the `bar` method\n# will be redefined every time `foo` is invoked.\ndef foo\n  def bar\n  end\nend"
+      ],
+      "good": [
+        "\ndef foo\n  bar = -> { puts 'hello' }\n  bar.call\nend\ndef foo\n  self.class_eval do\n    def bar\n    end\n  end\nend\n\ndef foo\n  self.module_exec do\n    def bar\n    end\n  end\nend\ndef foo\n  class << self\n    def bar\n    end\n  end\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Do not use nested method definitions.",
+      "StyleGuide": "#no-nested-methods",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/NextWithoutAccumulator",
+    "department": "Lint",
+    "description": "Don't omit the accumulator when calling `next` in a `reduce` block.",
+    "examples": {
+      "bad": [
+        "\nresult = (1..4).reduce(0) do |acc, i|\n  next if i.odd?\n  acc + i\nend"
+      ],
+      "good": [
+        "\nresult = (1..4).reduce(0) do |acc, i|\n  next acc if i.odd?\n  acc + i\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Do not omit the accumulator when calling `next` in a `reduce`/`inject` block.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/ParenthesesAsGroupedExpression",
+    "department": "Lint",
+    "description": "Checks for space between a the name of a called method and a left\nparenthesis.",
+    "examples": {
+      "bad": [
+        "\nputs (x + y)"
+      ],
+      "good": [
+        "\nputs(x + y)"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for method calls with a space before the opening parenthesis.",
+      "StyleGuide": "#parens-no-spaces",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/PercentStringArray",
+    "department": "Lint",
+    "description": "This cop checks for quotes and commas in %w, e.g. `%w('foo', \"bar\")`\n\nIt is more likely that the additional characters are unintended (for\nexample, mistranslating an array of literals to percent string notation)\nrather than meant to be part of the resulting strings.",
+    "examples": {
+      "bad": [
+        "\n%w('foo', \"bar\")"
+      ],
+      "good": [
+        "\n%w(foo bar)"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for unwanted commas and quotes in %w/%W literals.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/PercentSymbolArray",
+    "department": "Lint",
+    "description": "This cop checks for colons and commas in %i, e.g. `%i(:foo, :bar)`\n\nIt is more likely that the additional characters are unintended (for\nexample, mistranslating an array of literals to percent string notation)\nrather than meant to be part of the resulting symbols.",
+    "examples": {
+      "bad": [
+        "\n%i(:foo, :bar)"
+      ],
+      "good": [
+        "\n%i(foo bar)"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for unwanted commas and colons in %i/%I literals.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/RandOne",
+    "department": "Lint",
+    "description": "This cop checks for `rand(1)` calls.\nSuch calls always return `0`.",
+    "examples": {
+      "bad": [
+        "\nrand 1\nKernel.rand(-1)\nrand 1.0\nrand(-1.0)"
+      ],
+      "good": [
+        "\n0 # just use 0 instead"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for `rand(1)` calls. Such calls always return `0` and most likely a mistake.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/RequireParentheses",
+    "department": "Lint",
+    "description": "This cop checks for expressions where there is a call to a predicate\nmethod with at least one argument, where no parentheses are used around\nthe parameter list, and a boolean operator, && or ||, is used in the\nlast argument.\n\nThe idea behind warning for these constructs is that the user might\nbe under the impression that the return value from the method call is\nan operand of &&/||.",
+    "examples": {
+      "bad": [
+        "\nif day.is? :tuesday && month == :jan\n  ...\nend"
+      ],
+      "good": [
+        "\nif day.is?(:tuesday) && month == :jan"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use parentheses in the method call to avoid confusion about precedence.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/RescueException",
+    "department": "Lint",
+    "description": "This cop checks for *rescue* blocks targeting the Exception class.",
+    "examples": {
+      "bad": [
+        "\nbegin\n  do_something\nrescue Exception\n  handle_exception\nend"
+      ],
+      "good": [
+        "\nbegin\n  do_something\nrescue ArgumentError\n  handle_exception\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Avoid rescuing the Exception class.",
+      "StyleGuide": "#no-blind-rescues",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/SafeNavigationChain",
+    "department": "Lint",
+    "description": "The safe navigation operator returns nil if the receiver is\nnil.  If you chain an ordinary method call after a safe\nnavigation operator, it raises NoMethodError.  We should use a\nsafe navigation operator after a safe navigation operator.\nThis cop checks for the problem outlined above.",
+    "examples": {
+      "bad": [
+        "\nx&.foo.bar\nx&.foo + bar\nx&.foo[bar]"
+      ],
+      "good": [
+        "\nx&.foo&.bar\nx&.foo || bar"
+      ]
+    },
+    "pars": {
+      "Whitelist": [
+        "present?",
+        "blank?",
+        "presence",
+        "try"
+      ]
+    },
+    "config": {
+      "Description": "Do not chain ordinary method call after safe navigation operator.",
+      "Enabled": true,
+      "Whitelist": [
+        "present?",
+        "blank?",
+        "presence",
+        "try"
+      ]
+    }
+  },
+  {
+    "name": "Lint/ShadowedException",
+    "department": "Lint",
+    "description": "This cop checks for a rescued exception that get shadowed by a\nless specific exception being rescued before a more specific\nexception is rescued.",
+    "examples": {
+      "bad": [
+        "\nbegin\n  something\nrescue Exception\n  handle_exception\nrescue StandardError\n  handle_standard_error\nend"
+      ],
+      "good": [
+        "\nbegin\n  something\nrescue StandardError\n  handle_standard_error\nrescue Exception\n  handle_exception\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Avoid rescuing a higher level exception before a lower level exception.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/ShadowingOuterLocalVariable",
+    "department": "Lint",
+    "description": "This cop looks for use of the same name as outer local variables\nfor block arguments or block local variables.\nThis is a mimic of the warning\n\"shadowing outer local variable - foo\" from `ruby -cw`.",
+    "examples": {
+      "bad": [
+        "\ndef some_method\n  foo = 1\n\n  2.times do |foo| # shadowing outer `foo`\n    do_something(foo)\n  end\nend"
+      ],
+      "good": [
+        "\ndef some_method\n  foo = 1\n\n  2.times do |bar|\n    do_something(bar)\n  end\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Do not use the same name as outer local variable for block arguments or block local variables.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/StringConversionInInterpolation",
+    "department": "Lint",
+    "description": "This cop checks for string conversion in string interpolation,\nwhich is redundant.",
+    "examples": {
+      "bad": [
+        "\n\"result is #{something.to_s}\""
+      ],
+      "good": [
+        "\n\"result is #{something}\""
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for Object#to_s usage in string interpolation.",
+      "StyleGuide": "#no-to-s",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/UnderscorePrefixedVariableName",
+    "department": "Lint",
+    "description": "This cop checks for underscore-prefixed variables that are actually\nused.",
+    "examples": {
+      "bad": [
+        "\n[1, 2, 3].each do |_num|\n  do_something(_num)\nend"
+      ],
+      "good": [
+        "\n[1, 2, 3].each do |num|\n  do_something(num)\nend\n[1, 2, 3].each do |_num|\n  do_something # not using `_num`\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Do not use prefix `_` for a variable that is used.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/UnifiedInteger",
+    "department": "Lint",
+    "description": "This cop checks for using Fixnum or Bignum constant.",
+    "examples": {
+      "bad": [
+        "\n1.is_a?(Fixnum)\n1.is_a?(Bignum)"
+      ],
+      "good": [
+        "\n1.is_a?(Integer)"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use Integer instead of Fixnum or Bignum",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/UnneededSplatExpansion",
+    "department": "Lint",
+    "description": "This cop checks for unneeded usages of splat expansion",
+    "examples": {
+      "bad": [
+        "\na = *[1, 2, 3]\na = *'a'\na = *1\n\nbegin\n  foo\nrescue *[StandardError, ApplicationError]\n  bar\nend\n\ncase foo\nwhen *[1, 2, 3]\n  bar\nelse\n  baz\nend"
+      ],
+      "good": [
+        "\nc = [1, 2, 3]\na = *c\na, b = *c\na, *b = *c\na = *1..10\na = ['a']\n\nbegin\n  foo\nrescue StandardError, ApplicationError\n  bar\nend\n\ncase foo\nwhen *[1, 2, 3]\n  bar\nelse\n  baz\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for splat unnecessarily being called on literals",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/UnreachableCode",
+    "department": "Lint",
+    "description": "This cop checks for unreachable code.\nThe check are based on the presence of flow of control\nstatement in non-final position in *begin*(implicit) blocks.",
+    "examples": {
+      "bad": [
+        "\ndef some_method\n  return\n  do_something\nend"
+      ],
+      "good": [
+        "\ndef some_method\n  do_something\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Unreachable code.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/UnusedBlockArgument",
+    "department": "Lint",
+    "description": "This cop checks for unused block arguments.",
+    "examples": {
+      "bad": [
+        "\ndo_something do |used, unused|\n  puts used\nend\n\ndo_something do |bar|\n  puts :foo\nend\n\ndefine_method(:foo) do |bar|\n  puts :baz\nend"
+      ]
+    },
+    "pars": {
+      "IgnoreEmptyBlocks": true,
+      "AllowUnusedKeywordArguments": false
+    },
+    "config": {
+      "Description": "Checks for unused block arguments.",
+      "StyleGuide": "#underscore-unused-vars",
+      "Enabled": true,
+      "IgnoreEmptyBlocks": true,
+      "AllowUnusedKeywordArguments": false
+    }
+  },
+  {
+    "name": "Lint/UnusedMethodArgument",
+    "department": "Lint",
+    "description": "This cop checks for unused method arguments.",
+    "examples": {
+      "bad": [
+        "\ndef some_method(used, unused, _unused_but_allowed)\n  puts used\nend"
+      ],
+      "good": [
+        "\ndef some_method(used, _unused, _unused_but_allowed)\n  puts used\nend"
+      ]
+    },
+    "pars": {
+      "AllowUnusedKeywordArguments": false,
+      "IgnoreEmptyMethods": true
+    },
+    "config": {
+      "Description": "Checks for unused method arguments.",
+      "StyleGuide": "#underscore-unused-vars",
+      "Enabled": true,
+      "AllowUnusedKeywordArguments": false,
+      "IgnoreEmptyMethods": true
+    }
+  },
+  {
+    "name": "Lint/UselessAssignment",
+    "department": "Lint",
+    "description": "This cop checks for every useless assignment to local variable in every\nscope.\nThe basic idea for this cop was from the warning of `ruby -cw`:\n\n  assigned but unused variable - foo\n\nCurrently this cop has advanced logic that detects unreferenced\nreassignments and properly handles varied cases such as branch, loop,\nrescue, ensure, etc.",
+    "examples": {
+      "bad": [
+        "\ndef some_method\n  some_var = 1\n  do_something\nend"
+      ],
+      "good": [
+        "\ndef some_method\n  some_var = 1\n  do_something(some_var)\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for useless assignment to a local variable.",
+      "StyleGuide": "#underscore-unused-vars",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/UselessComparison",
+    "department": "Lint",
+    "description": "This cop checks for comparison of something with itself.",
+    "examples": {
+      "bad": [
+        "\nx.top >= x.top"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for comparison of something with itself.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/UselessElseWithoutRescue",
+    "department": "Lint",
+    "description": "This cop checks for useless `else` in `begin..end` without `rescue`.",
+    "examples": {
+      "bad": [
+        "\nbegin\n  do_something\nelse\n  do_something_else # This will never be run.\nend"
+      ],
+      "good": [
+        "\nbegin\n  do_something\nrescue\n  handle_errors\nelse\n  do_something_else\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for useless `else` in `begin..end` without `rescue`.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/UselessSetterCall",
+    "department": "Lint",
+    "description": "This cop checks for setter call to local variable as the final\nexpression of a function definition.",
+    "examples": {
+      "bad": [
+        "\ndef something\n  x = Something.new\n  x.attr = 5\nend"
+      ],
+      "good": [
+        "\ndef something\n  x = Something.new\n  x.attr = 5\n  x\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for useless setter call to a local variable.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Lint/Void",
+    "department": "Lint",
+    "description": "This cop checks for operators, variables and literals used\nin void context.",
+    "examples": {
+      "bad": [
+        "\ndef some_method\n  some_num * 10\n  do_something\nend\ndef some_method\n  some_var\n  do_something\nend"
+      ],
+      "good": [
+        "\ndef some_method\n  do_something\n  some_num * 10\nend\ndef some_method\n  do_something\n  some_var\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Possible use of operator/literal/variable in void context.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/Caller",
+    "department": "Performance",
+    "description": "This cop identifies places where `caller[n]`\ncan be replaced by `caller(n..n).first`.",
+    "examples": {
+      "bad": [
+        "caller[n]\ncaller.first\n\n"
+      ],
+      "good": [
+        "caller(n..n).first\ncaller(1..1).first"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `caller(n..n)` instead of `caller`.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/CaseWhenSplat",
+    "department": "Performance",
+    "description": "Place `when` conditions that use splat at the end\nof the list of `when` branches.\n\nRuby has to allocate memory for the splat expansion every time\nthat the `case` `when` statement is run. Since Ruby does not support\nfall through inside of `case` `when`, like some other languages do,\nthe order of the `when` branches does not matter. By placing any\nsplat expansions at the end of the list of `when` branches we will\nreduce the number of times that memory has to be allocated for\nthe expansion.\n\nThis is not a guaranteed performance improvement. If the data being\nprocessed by the `case` condition is normalized in a manner that favors\nhitting a condition in the splat expansion, it is possible that\nmoving the splat condition to the end will use more memory,\nand run slightly slower.",
+    "examples": {
+      "bad": [
+        "case foo\nwhen *condition\n  bar\nwhen baz\n  foobar\nend\n\ncase foo\nwhen *[1, 2, 3, 4]\n  bar\nwhen 5\n  baz\nend\n\n"
+      ],
+      "good": [
+        "case foo\nwhen baz\n  foobar\nwhen *condition\n  bar\nend\n\ncase foo\nwhen 1, 2, 3, 4\n  bar\nwhen 5\n  baz\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Place `when` conditions that use splat at the end of the list of `when` branches.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/Casecmp",
+    "department": "Performance",
+    "description": "This cop identifies places where a case-insensitive string comparison\ncan better be implemented using `casecmp`.",
+    "examples": {
+      "bad": [
+        "str.downcase == 'abc'\nstr.upcase.eql? 'ABC'\n'abc' == str.downcase\n'ABC'.eql? str.upcase\nstr.downcase == str.downcase\n\n"
+      ],
+      "good": [
+        "str.casecmp('ABC').zero?\n'abc'.casecmp(str).zero?"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `casecmp` rather than `downcase ==`, `upcase ==`, `== downcase`, or `== upcase`..",
+      "Reference": "https://github.com/JuanitoFatas/fast-ruby#stringcasecmp-vs-stringdowncase---code",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/CompareWithBlock",
+    "department": "Performance",
+    "description": "This cop identifies places where `sort { |a, b| a.foo <=> b.foo }`\ncan be replaced by `sort_by(&:foo)`.\nThis cop also checks `max` and `min` methods.",
+    "examples": {
+      "bad": [
+        "array.sort { |a, b| a.foo <=> b.foo }\narray.max { |a, b| a.foo <=> b.foo }\narray.min { |a, b| a.foo <=> b.foo }\n\n"
+      ],
+      "good": [
+        "array.sort_by(&:foo)\narray.sort_by { |v| v.foo }\narray.sort_by do |var|\n  var.foo\nend\narray.max_by(&:foo)\narray.min_by(&:foo)"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `sort_by(&:foo)` instead of `sort_by { |a, b| a.foo <=> b.foo }`.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/Count",
+    "department": "Performance",
+    "description": "This cop is used to identify usages of `count` on an `Enumerable` that\nfollow calls to `select` or `reject`. Querying logic can instead be\npassed to the `count` call.\n\n`ActiveRecord` compatibility:\n`ActiveRecord` will ignore the block that is passed to `count`.\nOther methods, such as `select`, will convert the association to an\narray and then run the block on the array. A simple work around to\nmake `count` work with a block is to call `to_a.count {...}`.\n\nExample:\n  Model.where(id: [1, 2, 3].select { |m| m.method == true }.size\n\n  becomes:\n\n  Model.where(id: [1, 2, 3]).to_a.count { |m| m.method == true }",
+    "examples": {
+      "bad": [
+        "[1, 2, 3].select { |e| e > 2 }.size\n[1, 2, 3].reject { |e| e > 2 }.size\n[1, 2, 3].select { |e| e > 2 }.length\n[1, 2, 3].reject { |e| e > 2 }.length\n[1, 2, 3].select { |e| e > 2 }.count { |e| e.odd? }\n[1, 2, 3].reject { |e| e > 2 }.count { |e| e.even? }\narray.select(&:value).count\n\n"
+      ],
+      "good": [
+        "[1, 2, 3].count { |e| e > 2 }\n[1, 2, 3].count { |e| e < 2 }\n[1, 2, 3].count { |e| e > 2 && e.odd? }\n[1, 2, 3].count { |e| e < 2 && e.even? }\nModel.select('field AS field_one').count\nModel.select(:value).count"
+      ]
+    },
+    "pars": {
+      "SafeMode": true
+    },
+    "config": {
+      "Description": "Use `count` instead of `select...size`, `reject...size`, `select...count`, `reject...count`, `select...length`, and `reject...length`.",
+      "SafeMode": true,
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/Detect",
+    "department": "Performance",
+    "description": "This cop is used to identify usages of\n`select.first`, `select.last`, `find_all.first`, and `find_all.last`\nand change them to use `detect` instead.\n\n`ActiveRecord` compatibility:\n`ActiveRecord` does not implement a `detect` method and `find` has its\nown meaning. Correcting ActiveRecord methods with this cop should be\nconsidered unsafe.",
+    "examples": {
+      "bad": [
+        "[].select { |item| true }.first\n[].select { |item| true }.last\n[].find_all { |item| true }.first\n[].find_all { |item| true }.last\n\n"
+      ],
+      "good": [
+        "[].detect { |item| true }\n[].reverse.detect { |item| true }"
+      ]
+    },
+    "pars": {
+      "SafeMode": true
+    },
+    "config": {
+      "Description": "Use `detect` instead of `select.first`, `find_all.first`, `select.last`, and `find_all.last`.",
+      "Reference": "https://github.com/JuanitoFatas/fast-ruby#enumerabledetect-vs-enumerableselectfirst-code",
+      "SafeMode": true,
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/DoubleStartEndWith",
+    "department": "Performance",
+    "description": "This cop checks for double `#start_with?` or `#end_with?` calls\nseparated by `||`. In some cases such calls can be replaced\nwith an single `#start_with?`/`#end_with?` call.",
+    "examples": {
+      "bad": [
+        "str.start_with?(\"a\") || str.start_with?(Some::CONST)\nstr.start_with?(\"a\", \"b\") || str.start_with?(\"c\")\nvar1 = ...\nvar2 = ...\nstr.end_with?(var1) || str.end_with?(var2)\n\n"
+      ],
+      "good": [
+        "str.start_with?(\"a\", Some::CONST)\nstr.start_with?(\"a\", \"b\", \"c\")\nvar1 = ...\nvar2 = ...\nstr.end_with?(var1, var2)"
+      ]
+    },
+    "pars": {
+      "IncludeActiveSupportAliases": false
+    },
+    "config": {
+      "Description": "Use `str.{start,end}_with?(x, ..., y, ...)` instead of `str.{start,end}_with?(x, ...) || str.{start,end}_with?(y, ...)`.",
+      "Enabled": true,
+      "IncludeActiveSupportAliases": false
+    }
+  },
+  {
+    "name": "Performance/EndWith",
+    "department": "Performance",
+    "description": "This cop identifies unnecessary use of a regex where `String#end_with?`\nwould suffice.",
+    "examples": {
+      "bad": [
+        "'abc' =~ /bc\\Z/\n'abc'.match(/bc\\Z/)\n\n"
+      ],
+      "good": [
+        "'abc'.end_with?('bc')"
+      ]
+    },
+    "pars": {
+      "AutoCorrect": false
+    },
+    "config": {
+      "Description": "Use `end_with?` instead of a regex match anchored to the end of a string.",
+      "Reference": "https://github.com/JuanitoFatas/fast-ruby#stringmatch-vs-stringstart_withstringend_with-code-start-code-end",
+      "AutoCorrect": false,
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/FlatMap",
+    "department": "Performance",
+    "description": "This cop is used to identify usages of",
+    "examples": {
+      "bad": [
+        "[1, 2, 3, 4].map { |e| [e, e] }.flatten(1)\n[1, 2, 3, 4].collect { |e| [e, e] }.flatten(1)\n\n"
+      ],
+      "good": [
+        "[1, 2, 3, 4].flat_map { |e| [e, e] }\n[1, 2, 3, 4].map { |e| [e, e] }.flatten\n[1, 2, 3, 4].collect { |e| [e, e] }.flatten"
+      ]
+    },
+    "pars": {
+      "EnabledForFlattenWithoutParams": false
+    },
+    "config": {
+      "Description": "Use `Enumerable#flat_map` instead of `Enumerable#map...Array#flatten(1)` or `Enumberable#collect..Array#flatten(1)`",
+      "Reference": "https://github.com/JuanitoFatas/fast-ruby#enumerablemaparrayflatten-vs-enumerableflat_map-code",
+      "Enabled": true,
+      "EnabledForFlattenWithoutParams": false
+    }
+  },
+  {
+    "name": "Performance/HashEachMethods",
+    "department": "Performance",
+    "description": "This cop checks for uses of `each_key` & `each_value` Hash methods.",
+    "examples": {
+      "bad": [
+        "hash.keys.each { |k| p k }\nhash.values.each { |v| p v }\nhash.each { |k, _v| p k }\nhash.each { |_k, v| p v }\n\n"
+      ],
+      "good": [
+        "hash.each_key { |k| p k }\nhash.each_value { |v| p v }"
+      ]
+    },
+    "pars": {
+      "AutoCorrect": false
+    },
+    "config": {
+      "Description": "Use `Hash#each_key` and `Hash#each_value` instead of `Hash#keys.each` and `Hash#values.each`.",
+      "StyleGuide": "#hash-each",
+      "Enabled": true,
+      "AutoCorrect": false
+    }
+  },
+  {
+    "name": "Performance/LstripRstrip",
+    "department": "Performance",
+    "description": "This cop identifies places where `lstrip.rstrip` can be replaced by\n`strip`.",
+    "examples": {
+      "bad": [
+        "'abc'.lstrip.rstrip\n'abc'.rstrip.lstrip\n\n"
+      ],
+      "good": [
+        "'abc'.strip"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `strip` instead of `lstrip.rstrip`.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/RedundantBlockCall",
+    "department": "Performance",
+    "description": "This cop identifies the use of a `&block` parameter and `block.call`\nwhere `yield` would do just as well.",
+    "examples": {
+      "bad": [
+        "def method(&block)\n  block.call\nend\ndef another(&func)\n  func.call 1, 2, 3\nend\n\n"
+      ],
+      "good": [
+        "def method\n  yield\nend\ndef another\n  yield 1, 2, 3\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `yield` instead of `block.call`.",
+      "Reference": "https://github.com/JuanitoFatas/fast-ruby#proccall-vs-yield-code",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/RedundantMatch",
+    "department": "Performance",
+    "description": "This cop identifies use of `Regexp#match` or `String#match` in a context\nwhere the integral return value of `=~` would do just as well.",
+    "examples": {
+      "bad": [
+        "do_something if str.match(/regex/)\nwhile regex.match('str')\n  do_something\nend\n\n"
+      ],
+      "good": [
+        "method(str.match(/regex/))\nreturn regex.match('str')"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `=~` instead of `String#match` or `Regexp#match` in a context where the returned `MatchData` is not needed.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/RedundantSortBy",
+    "department": "Performance",
+    "description": "This cop identifies places where `sort_by { ... }` can be replaced by\n`sort`.",
+    "examples": {
+      "bad": [
+        "array.sort_by { |x| x }\narray.sort_by do |var|\n  var\nend\n\n"
+      ],
+      "good": [
+        "array.sort"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `sort` instead of `sort_by { |x| x }`.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/RegexpMatch",
+    "department": "Performance",
+    "description": "In Ruby 2.4, `String#match?`, `Regexp#match?` and `Symbol#match?`\nhave been added. The methods are faster than `match`.\nBecause the methods avoid creating a `MatchData` object or saving\nbackref.\nSo, when `MatchData` is not used, use `match?` instead of `match`.",
+    "examples": {
+      "bad": [
+        "def foo\n  if x =~ /re/\n    do_something\n  end\nend\n\ndef foo\n  if x.match(/re/)\n    do_something\n  end\nend\n\ndef foo\n  if /re/ === x\n    do_something\n  end\nend\n\n"
+      ],
+      "good": [
+        "def foo\n  if x.match?(/re/)\n    do_something\n  end\nend\n\ndef foo\n  if x =~ /re/\n    do_something(Regexp.last_match)\n  end\nend\n\ndef foo\n  if x.match(/re/)\n    do_something($~)\n  end\nend\n\ndef foo\n  if /re/ === x\n    do_something($~)\n  end\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `match?` instead of `Regexp#match`, `String#match`, `Symbol#match`, `Regexp#===`, or `=~` when `MatchData` is not used.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/ReverseEach",
+    "department": "Performance",
+    "description": "This cop is used to identify usages of `reverse.each` and\nchange them to use `reverse_each` instead.",
+    "examples": {
+      "bad": [
+        "[].reverse.each\n\n"
+      ],
+      "good": [
+        "[].reverse_each"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `reverse_each` instead of `reverse.each`.",
+      "Reference": "https://github.com/JuanitoFatas/fast-ruby#enumerablereverseeach-vs-enumerablereverse_each-code",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/Sample",
+    "department": "Performance",
+    "description": "This cop is used to identify usages of `shuffle.first`, `shuffle.last`\nand `shuffle[]` and change them to use `sample` instead.",
+    "examples": {
+      "bad": [
+        "[1, 2, 3].shuffle.first\n[1, 2, 3].shuffle.first(2)\n[1, 2, 3].shuffle.last\n[1, 2, 3].shuffle[2]\n[1, 2, 3].shuffle[0, 2]    # sample(2) will do the same\n[1, 2, 3].shuffle[0..2]    # sample(3) will do the same\n[1, 2, 3].shuffle(random: Random.new).first\n\n"
+      ],
+      "good": [
+        "[1, 2, 3].shuffle\n[1, 2, 3].sample\n[1, 2, 3].sample(3)\n[1, 2, 3].shuffle[1, 3]    # sample(3) might return a longer Array\n[1, 2, 3].shuffle[1..3]    # sample(3) might return a longer Array\n[1, 2, 3].shuffle[foo, bar]\n[1, 2, 3].shuffle(random: Random.new)"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `sample` instead of `shuffle.first`, `shuffle.last`, and `shuffle[Integer]`.",
+      "Reference": "https://github.com/JuanitoFatas/fast-ruby#arrayshufflefirst-vs-arraysample-code",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/Size",
+    "department": "Performance",
+    "description": "This cop is used to identify usages of `count` on an\n`Array` and `Hash` and change them to `size`.\n\nTODO: Add advanced detection of variables that could\nhave been assigned to an array or a hash.",
+    "examples": {
+      "bad": [
+        "[1, 2, 3].count\n\n{a: 1, b: 2, c: 3}.count\n\n"
+      ],
+      "good": [
+        "[1, 2, 3].size\n\n{a: 1, b: 2, c: 3}.size\n\n[1, 2, 3].count { |e| e > 2 }"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `size` instead of `count` for counting the number of elements in `Array` and `Hash`.",
+      "Reference": "https://github.com/JuanitoFatas/fast-ruby#arraycount-vs-arraysize-code",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/StartWith",
+    "department": "Performance",
+    "description": "This cop identifies unnecessary use of a regex where\n`String#start_with?` would suffice.",
+    "examples": {
+      "bad": [
+        "'abc' =~ /\\Aab/\n'abc'.match(/\\Aab/)\n\n"
+      ],
+      "good": [
+        "'abc'.start_with?('ab')"
+      ]
+    },
+    "pars": {
+      "AutoCorrect": false
+    },
+    "config": {
+      "Description": "Use `start_with?` instead of a regex match anchored to the beginning of a string.",
+      "Reference": "https://github.com/JuanitoFatas/fast-ruby#stringmatch-vs-stringstart_withstringend_with-code-start-code-end",
+      "AutoCorrect": false,
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/StringReplacement",
+    "department": "Performance",
+    "description": "This cop identifies places where `gsub` can be replaced by\n`tr` or `delete`.",
+    "examples": {
+      "bad": [
+        "'abc'.gsub('b', 'd')\n'abc'.gsub('a', '')\n'abc'.gsub(/a/, 'd')\n'abc'.gsub!('a', 'd')\n\n"
+      ],
+      "good": [
+        "'abc'.gsub(/.*/, 'a')\n'abc'.gsub(/a+/, 'd')\n'abc'.tr('b', 'd')\n'a b c'.delete(' ')"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `tr` instead of `gsub` when you are replacing the same number of characters. Use `delete` instead of `gsub` when you are deleting characters.",
+      "Reference": "https://github.com/JuanitoFatas/fast-ruby#stringgsub-vs-stringtr-code",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Performance/TimesMap",
+    "department": "Performance",
+    "description": "This cop checks for .times.map calls.\nIn most cases such calls can be replaced\nwith an explicit array creation.",
+    "examples": {
+      "bad": [
+        "9.times.map do |i|\n  i.to_s\nend\n\n"
+      ],
+      "good": [
+        "Array.new(9) do |i|\n  i.to_s\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for .times.map calls.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Rails/ActiveSupportAliases",
+    "department": "Rails",
+    "description": "This cop checks that ActiveSupport aliases to core ruby methods\nare not used.",
+    "examples": {
+      "good": [
+        "'some_string'.start_with?('prefix')\n'some_string'.end_with?('suffix')\n[1, 2, 'a'] << 'b'\n[1, 2, 'a'].unshift('b')\n\n"
+      ],
+      "bad": [
+        "'some_string'.starts_with?('prefix')\n'some_string'.ends_with?('suffix')\n[1, 2, 'a'].append('b')\n[1, 2, 'a'].prepend('b')"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Avoid ActiveSupport aliases of standard ruby methods: `String#starts_with?`, `String#ends_with?`, `Array#append`, `Array#prepend`.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Rails/ApplicationJob",
+    "department": "Rails",
+    "description": "This cop checks that jobs subclass ApplicationJob with Rails 5.0.",
+    "examples": {
+      "good": [
+        "class Rails5Job < ApplicationJob\n  ...\nend\n\n"
+      ],
+      "bad": [
+        "class Rails4Job < ActiveJob::Base\n  ...\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Check that jobs subclass ApplicationJob.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Rails/ApplicationRecord",
+    "department": "Rails",
+    "description": "This cop checks that models subclass ApplicationRecord with Rails 5.0.",
+    "examples": {
+      "good": [
+        "class Rails5Model < ApplicationRecord\n  ...\nend\n\n"
+      ],
+      "bad": [
+        "class Rails4Model < ActiveRecord::Base\n  ...\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Check that models subclass ApplicationRecord.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Rails/Delegate",
+    "department": "Rails",
+    "description": "This cop looks for delegations, that could have been created\nautomatically with delegate method.",
+    "examples": {
+      "bad": [
+        "def bar\n  foo.bar\nend\n\ndef foo_bar\n  foo.bar\nend\n\n"
+      ],
+      "good": [
+        "delegate :bar, to: :foo\n\ndelegate :bar, to: :foo, prefix: true\n\nprivate\ndef bar\n  foo.bar\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Prefer delegate method for delegations.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Rails/DelegateAllowBlank",
+    "department": "Rails",
+    "description": "This cop looks for delegations that pass :allow_blank as an option\ninstead of :allow_nil. :allow_blank is not a valid option to pass\nto ActiveSupport#delegate.",
+    "examples": {
+      "bad": [
+        "delegate :foo, to: :bar, allow_blank: true\n\n"
+      ],
+      "good": [
+        "delegate :foo, to: :bar, allow_nil: true"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Do not use allow_blank as an option to delegate.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Rails/DynamicFindBy",
+    "department": "Rails",
+    "description": "This cop checks dynamic `find_by_*` methods.\nUse `find_by` instead of dynamic method.\nSee. https://github.com/bbatsov/rails-style-guide#find_by",
+    "examples": {
+      "bad": [
+        "User.find_by_name(name)\n\nUser.find_by_name_and_email(name)\n\nUser.find_by_email!(name)\n\n"
+      ],
+      "good": [
+        "User.find_by(name: name)\n\nUser.find_by(name: name, email: email)\n\nUser.find_by!(email: email)"
+      ]
+    },
+    "pars": {
+      "Whitelist": [
+        "find_by_sql"
+      ]
+    },
+    "config": {
+      "Description": "Use `find_by` instead of dynamic `find_by_*`.",
+      "StyleGuide": "https://github.com/bbatsov/rails-style-guide#find_by",
+      "Enabled": true,
+      "Whitelist": [
+        "find_by_sql"
+      ]
+    }
+  },
+  {
+    "name": "Rails/EnumUniqueness",
+    "department": "Rails",
+    "description": "This cop looks for duplicate values in enum declarations.",
+    "examples": {
+      "bad": [
+        "enum status: { active: 0, archived: 0 }\n\nenum status: [:active, :archived, :active]\n\n"
+      ],
+      "good": [
+        "enum status: { active: 0, archived: 1 }\n\nenum status: [:active, :archived]"
+      ]
+    },
+    "pars": {
+      "Include": [
+        "app/models/**/*.rb"
+      ]
+    },
+    "config": {
+      "Description": "Avoid duplicate integers in hash-syntax `enum` declaration.",
+      "Enabled": true,
+      "Include": [
+        "app/models/**/*.rb"
+      ]
+    }
+  },
+  {
+    "name": "Rails/FilePath",
+    "department": "Rails",
+    "description": "This cop is used to identify usages of file path joining process\nto use `Rails.root.join` clause.",
+    "examples": {
+      "bad": [
+        "Rails.root.join('app/models/goober')\nFile.join(Rails.root, 'app/models/goober')\n\"#{Rails.root}/app/models/goober\"\n\n"
+      ],
+      "good": [
+        "Rails.root.join('app', 'models', 'goober')"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `Rails.root.join` for file path joining.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Rails/FindBy",
+    "department": "Rails",
+    "description": "This cop is used to identify usages of `where.first` and\nchange them to use `find_by` instead.",
+    "examples": {
+      "bad": [
+        "User.where(name: 'Bruce').first\nUser.where(name: 'Bruce').take\n\n"
+      ],
+      "good": [
+        "User.find_by(name: 'Bruce')"
+      ]
+    },
+    "pars": {
+      "Include": [
+        "app/models/**/*.rb"
+      ]
+    },
+    "config": {
+      "Description": "Prefer find_by over where.first.",
+      "StyleGuide": "https://github.com/bbatsov/rails-style-guide#find_by",
+      "Enabled": true,
+      "Include": [
+        "app/models/**/*.rb"
+      ]
+    }
+  },
+  {
+    "name": "Rails/FindEach",
+    "department": "Rails",
+    "description": "This cop is used to identify usages of `all.each` and\nchange them to use `all.find_each` instead.",
+    "examples": {
+      "bad": [
+        "User.all.each\n\n"
+      ],
+      "good": [
+        "User.all.find_each"
+      ]
+    },
+    "pars": {
+      "Include": [
+        "app/models/**/*.rb"
+      ]
+    },
+    "config": {
+      "Description": "Prefer all.find_each over all.find.",
+      "StyleGuide": "https://github.com/bbatsov/rails-style-guide#find-each",
+      "Enabled": true,
+      "Include": [
+        "app/models/**/*.rb"
+      ]
+    }
+  },
+  {
+    "name": "Rails/HttpPositionalArguments",
+    "department": "Rails",
+    "description": "This cop is used to identify usages of http methods like `get`, `post`,\n`put`, `patch` without the usage of keyword arguments in your tests and\nchange them to use keyword args.  This cop only applies to Rails >= 5 .\nIf you are not running Rails < 5 you should disable # the\nRails/HttpPositionalArguments cop or set your TargetRailsVersion in your\n.rubocop.yml file to 4.0, etc.",
+    "examples": {
+      "bad": [
+        "get :new, { user_id: 1}\n\n"
+      ],
+      "good": [
+        "get :new, params: { user_id: 1 }"
+      ]
+    },
+    "pars": {
+      "Include": [
+        "spec/**/*",
+        "test/**/*"
+      ]
+    },
+    "config": {
+      "Description": "Use keyword arguments instead of positional arguments in http method calls.",
+      "Enabled": true,
+      "Include": [
+        "spec/**/*",
+        "test/**/*"
+      ]
+    }
+  },
+  {
+    "name": "Rails/NotNullColumn",
+    "department": "Rails",
+    "description": "This cop checks for add_column call with NOT NULL constraint\nin migration file.",
+    "examples": {
+      "bad": [
+        "add_column :users, :name, :string, null: false\nadd_reference :products, :category, null: false\n\n"
+      ],
+      "good": [
+        "add_column :users, :name, :string, null: true\nadd_column :users, :name, :string, null: false, default: ''\nadd_reference :products, :category\nadd_reference :products, :category, null: false, default: 1"
+      ]
+    },
+    "pars": {
+      "Include": [
+        "db/migrate/*.rb"
+      ]
+    },
+    "config": {
+      "Description": "Do not add a NOT NULL column without a default value",
+      "Enabled": true,
+      "Include": [
+        "db/migrate/*.rb"
+      ]
+    }
+  },
+  {
+    "name": "Rails/OutputSafety",
+    "department": "Rails",
+    "description": "This cop checks for the use of output safety calls like html_safe and\nraw.",
+    "examples": {
+      "bad": [
+        "\"<p>#{text}</p>\".html_safe\n\nout = \"\"\nout << content_tag(:li, \"one\")\nout << content_tag(:li, \"two\")\nout.html_safe\n\n"
+      ],
+      "good": [
+        "content_tag(:p, text)\n\nout = []\nout << content_tag(:li, \"one\")\nout << content_tag(:li, \"two\")\nsafe_join(out)"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "The use of `html_safe` or `raw` may be a security risk.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Rails/PluralizationGrammar",
+    "department": "Rails",
+    "description": "This cop checks for correct grammar when using ActiveSupport's\ncore extensions to the numeric classes.",
+    "examples": {
+      "bad": [
+        "3.day.ago\n1.months.ago\n\n"
+      ],
+      "good": [
+        "3.days.ago\n1.month.ago"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for incorrect grammar when using methods like `3.day.ago`.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Rails/ReadWriteAttribute",
+    "department": "Rails",
+    "description": "This cop checks for the use of the read_attribute or\nwrite_attribute methods.",
+    "examples": {
+      "bad": [
+        "x = read_attribute(:attr)\nwrite_attribute(:attr, val)\n\n"
+      ],
+      "good": [
+        "x = self[:attr]\nself[:attr] = val"
+      ]
+    },
+    "pars": {
+      "Include": [
+        "app/models/**/*.rb"
+      ]
+    },
+    "config": {
+      "Description": "Checks for read_attribute(:attr) and write_attribute(:attr, val).",
+      "StyleGuide": "https://github.com/bbatsov/rails-style-guide#read-attribute",
+      "Enabled": true,
+      "Include": [
+        "app/models/**/*.rb"
+      ]
+    }
+  },
+  {
+    "name": "Rails/RelativeDateConstant",
+    "department": "Rails",
+    "description": "This cop checks whether constant value isn't relative date.\nBecause the relative date will be evaluated only once.",
+    "examples": {
+      "bad": [
+        "class SomeClass\n  EXPIRED_AT = 1.week.since\nend\n\n"
+      ],
+      "good": [
+        "class SomeClass\n  def self.expired_at\n    1.week.since\n  end\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Do not assign relative date to constants.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Rails/RequestReferer",
+    "department": "Rails",
+    "description": "This cop checks for consistent uses of `request.referer` or\n`request.referrer`, depending on the cop's configuration.",
+    "examples": {
+      "bad": [
+        "request.referrer\n\nrequest.referer\n\n"
+      ],
+      "good": [
+        "request.referer\n\n# EnforcedStyle: referrer\nrequest.referrer"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "referer",
+      "SupportedStyles": [
+        "referer",
+        "referrer"
+      ]
+    },
+    "config": {
+      "Description": "Use consistent syntax for request.referer.",
+      "Enabled": true,
+      "EnforcedStyle": "referer",
+      "SupportedStyles": [
+        "referer",
+        "referrer"
+      ]
+    }
+  },
+  {
+    "name": "Rails/ReversibleMigration",
+    "department": "Rails",
+    "description": "This cop checks whether the change method of the migration file is\nreversible.",
+    "examples": {
+      "bad": [
+        "def change\n  change_table :users do |t|\n    t.column :name, :string\n  end\nend\n\ndef change\n  drop_table :users\nend\n\ndef change\n  change_column_default(:suppliers, :qualification, 'new')\nend\n\ndef change\n  remove_column(:suppliers, :qualification)\nend\n\ndef change\n  remove_foreign_key :accounts, column: :owner_id\nend\n\n"
+      ],
+      "good": [
+        "def change\n  create_table :users do |t|\n    t.string :name\n  end\nend\n\ndef change\n  reversible do |dir|\n    change_table :users do |t|\n      dir.up do\n        t.column :name, :string\n      end\n\n      dir.down do\n        t.remove :name\n      end\n    end\n  end\nenddef change\n  drop_table :users do |t|\n    t.string :name\n  end\nenddef change\n  change_column_default(:posts, :state, from: nil, to: \"draft\")\nenddef change\n  remove_column(:suppliers, :qualification, :string)\nenddef change\n  remove_foreign_key :accounts, :branches\nend"
+      ]
+    },
+    "pars": {
+      "Include": [
+        "db/migrate/*.rb"
+      ]
+    },
+    "config": {
+      "Description": "Checks whether the change method of the migration file is reversible.",
+      "StyleGuide": "https://github.com/bbatsov/rails-style-guide#reversible-migration",
+      "Reference": "http://api.rubyonrails.org/classes/ActiveRecord/Migration/CommandRecorder.html",
+      "Enabled": true,
+      "Include": [
+        "db/migrate/*.rb"
+      ]
+    }
+  },
+  {
+    "name": "Rails/SaveBang",
+    "department": "Rails",
+    "description": "This cop identifies possible cases where Active Record save! or related\nshould be used instead of save because the model might have failed to\nsave and an exception is better than unhandled failure.\n\nThis will ignore calls that return a boolean for success if the result\nis assigned to a variable or used as the condition in an if/unless\nstatement.  It will also ignore calls that return a model assigned to a\nvariable that has a call to `persisted?`. Finally, it will ignore any\ncall with more than 2 arguments as that is likely not an Active Record\ncall or a Model.update(id, attributes) call.",
+    "examples": {
+      "bad": [
+        "user.save\nuser.update(name: 'Joe')\nuser.find_or_create_by(name: 'Joe')\nuser.destroy\n\n"
+      ],
+      "good": [
+        "unless user.save\n   . . .\nend\nuser.save!\nuser.update!(name: 'Joe')\nuser.find_or_create_by!(name: 'Joe')\nuser.destroy!\n\nuser = User.find_or_create_by(name: 'Joe')\nunless user.persisted?\n   . . .\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Identifies possible cases where Active Record save! or related should be used.",
+      "StyleGuide": "https://github.com/bbatsov/rails-style-guide#save-bang",
+      "Enabled": false
+    }
+  },
+  {
+    "name": "Rails/ScopeArgs",
+    "department": "Rails",
+    "description": "This cop checks for scope calls where it was passed\na method (usually a scope) instead of a lambda/proc.",
+    "examples": {
+      "bad": [
+        "scope :something, where(something: true)\n\n"
+      ],
+      "good": [
+        "scope :something, -> { where(something: true) }"
+      ]
+    },
+    "pars": {
+      "Include": [
+        "app/models/**/*.rb"
+      ]
+    },
+    "config": {
+      "Description": "Checks the arguments of ActiveRecord scopes.",
+      "Enabled": true,
+      "Include": [
+        "app/models/**/*.rb"
+      ]
+    }
+  },
+  {
+    "name": "Rails/SkipsModelValidations",
+    "department": "Rails",
+    "description": "This cop checks for the use of methods which skip\nvalidations which are listed in\nhttp://guides.rubyonrails.org/active_record_validations.html#skipping-validations",
+    "examples": {
+      "bad": [
+        "Article.first.decrement!(:view_count)\nDiscussionBoard.decrement_counter(:post_count, 5)\nArticle.first.increment!(:view_count)\nDiscussionBoard.increment_counter(:post_count, 5)\nperson.toggle :active\nproduct.touch\nBilling.update_all(\"category = 'authorized', author = 'David'\")\nuser.update_attribute(website: 'example.com')\nuser.update_columns(last_request_at: Time.current)\nPost.update_counters 5, comment_count: -1, action_count: 1\n\n"
+      ],
+      "good": [
+        "user.update_attributes(website: 'example.com')"
+      ]
+    },
+    "pars": {
+      "Blacklist": [
+        "decrement!",
+        "decrement_counter",
+        "increment!",
+        "increment_counter",
+        "toggle!",
+        "touch",
+        "update_all",
+        "update_attribute",
+        "update_column",
+        "update_columns",
+        "update_counters"
+      ]
+    },
+    "config": {
+      "Description": "Use methods that skips model validations with caution. See reference for more information.",
+      "Reference": "http://guides.rubyonrails.org/active_record_validations.html#skipping-validations",
+      "Enabled": true,
+      "Blacklist": [
+        "decrement!",
+        "decrement_counter",
+        "increment!",
+        "increment_counter",
+        "toggle!",
+        "touch",
+        "update_all",
+        "update_attribute",
+        "update_column",
+        "update_columns",
+        "update_counters"
+      ]
+    }
+  },
+  {
+    "name": "Rails/UniqBeforePluck",
+    "department": "Rails",
+    "description": "Prefer the use of uniq (or distinct), before pluck instead of after.\n\nThe use of uniq before pluck is preferred because it executes within\nthe database.\n\nThis cop has two different enforcement modes. When the EnforcedStyle\nis conservative (the default) then only calls to pluck on a constant\n(i.e. a model class) before uniq are added as offenses.\n\nWhen the EnforcedStyle is aggressive then all calls to pluck before\nuniq are added as offenses. This may lead to false positives as the cop\ncannot distinguish between calls to pluck on an ActiveRecord::Relation\nvs a call to pluck on an ActiveRecord::Associations::CollectionProxy.\n\nAutocorrect is disabled by default for this cop since it may generate\nfalse positives.",
+    "examples": {
+      "bad": [
+        "Model.pluck(:id).uniq\n\n"
+      ],
+      "good": [
+        "Model.uniq.pluck(:id)"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "conservative",
+      "SupportedStyles": [
+        "conservative",
+        "aggressive"
+      ],
+      "AutoCorrect": false
+    },
+    "config": {
+      "Description": "Prefer the use of uniq or distinct before pluck.",
+      "Enabled": true,
+      "EnforcedStyle": "conservative",
+      "SupportedStyles": [
+        "conservative",
+        "aggressive"
+      ],
+      "AutoCorrect": false
+    }
+  },
+  {
+    "name": "Security/Eval",
+    "department": "Security",
+    "description": "This cop checks for the use of *Kernel#eval*.",
+    "examples": {
+      "bad": [
+        "\neval(something)"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "The use of eval represents a serious security risk.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Security/MarshalLoad",
+    "department": "Security",
+    "description": "This cop checks for the use of Marshal class methods which have\npotential security issues leading to remote code execution when\nloading from an untrusted source.",
+    "examples": {
+      "bad": [
+        "Marshal.load(\"{}\")\nMarshal.restore(\"{}\")\n\n"
+      ],
+      "good": [
+        "Marshal.dump(\"{}\")\n\n# okish - deep copy hack\nMarshal.load(Marshal.dump({}))"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Avoid using of `Marshal.load` or `Marshal.restore` due to potential security issues. See reference for more information.",
+      "Reference": "http://ruby-doc.org/core-2.3.3/Marshal.html#module-Marshal-label-Security+considerations",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Security/YAMLLoad",
+    "department": "Security",
+    "description": "This cop checks for the use of YAML class methods which have\npotential security issues leading to remote code execution when\nloading from an untrusted source.",
+    "examples": {
+      "bad": [
+        "YAML.load(\"--- foo\")\n\n"
+      ],
+      "good": [
+        "YAML.safe_load(\"--- foo\")\nYAML.dump(\"foo\")"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Prefer usage of `YAML.safe_load` over `YAML.load` due to potential security issues. See reference for more information.",
+      "Reference": "https://ruby-doc.org/stdlib-2.3.3/libdoc/yaml/rdoc/YAML.html#module-YAML-label-Security",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/AccessorMethodName",
+    "department": "Style",
+    "description": "This cop makes sure that accessor methods are named properly.",
+    "examples": {
+      "bad": [
+        "def set_attribute(value) ...\n\ndef get_attribute ...\n\n"
+      ],
+      "good": [
+        "def attribute=(value)\n\ndef attribute ..."
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Check the naming of accessor methods for get_/set_.",
+      "StyleGuide": "#accessor_mutator_method_names",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/AutoResourceCleanup",
+    "department": "Style",
+    "description": "This cop checks for cases when you could use a block\naccepting version of a method that does automatic\nresource cleanup.",
+    "examples": {
+      "bad": [
+        "f = File.open('file')\n\n"
+      ],
+      "good": [
+        "f = File.open('file') do\n  ...\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Suggests the usage of an auto resource cleanup version of a method (if available).",
+      "Enabled": false
+    }
+  },
+  {
+    "name": "Style/BracesAroundHashParameters",
+    "department": "Style",
+    "description": "This cop checks for braces around the last parameter in a method call\nif the last parameter is a hash.\nIt supports 3 styles:\n\n* The `braces` style enforces braces around all method\nparameters that are hashes.\n\n* The `no_braces` style checks that the last parameter doesn't\nhave braces around it.\n\n* The `context_dependent` style checks that the last parameter\ndoesn't have braces around it, but requires braces if the\nsecond to last parameter is also a hash literal.",
+    "examples": {
+      "bad": [
+        "some_method(x, y, a: 1, b: 2)\n\nsome_method(x, y, {a: 1, b: 2})\n\nsome_method(x, y, {a: 1, b: 2})\nsome_method(x, y, {a: 1, b: 2}, a: 1, b: 2)\n\n"
+      ],
+      "good": [
+        "some_method(x, y, {a: 1, b: 2})some_method(x, y, a: 1, b: 2)some_method(x, y, a: 1, b: 2)\nsome_method(x, y, {a: 1, b: 2}, {a: 1, b: 2})"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "no_braces",
+      "SupportedStyles": [
+        "braces",
+        "no_braces",
+        "context_dependent"
+      ]
+    },
+    "config": {
+      "Description": "Enforce braces style around hash parameters.",
+      "Enabled": true,
+      "EnforcedStyle": "no_braces",
+      "SupportedStyles": [
+        "braces",
+        "no_braces",
+        "context_dependent"
+      ]
+    }
+  },
+  {
+    "name": "Style/ClassMethods",
+    "department": "Style",
+    "description": "This cop checks for uses of the class/module name instead of\nself, when defining class/module methods.",
+    "examples": {
+      "bad": [
+        "class SomeClass\n  def SomeClass.class_method\n    ...\n  end\nend\n\n"
+      ],
+      "good": [
+        "class SomeClass\n  def self.class_method\n    ...\n  end\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use self when defining module/class methods.",
+      "StyleGuide": "#def-self-class-methods",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/ClassStructure",
+    "department": "Style",
+    "description": "Checks if the code style follows the ExpectedOrder configuration:\n\n`Categories` allows us to map macro names into a category.\n\nConsider an example of code style that covers the following order:\n- Constants\n- Associations (has_one, has_many)\n- Attributes (attr_accessor, attr_writer, attr_reader)\n- Initialize\n- Instance methods\n- Protected methods\n- Private methods\n\nYou can configure the following order:\n\n```yaml\n Style/ClassStructure:\n   ExpectedOrder:\n     - constant\n     - association\n     - attribute\n     - initialize\n     - instance_method\n     - protected_method\n     - private_method\n\n```\nInstead of putting all literals in the expected order, is also\npossible to group categories of macros.\n\n```yaml\n Style/ClassStructure:\n   Categories:\n     association:\n       - has_many\n       - has_one\n     attribute:\n       - attr_accessor\n       - attr_reader\n       - attr_writer\n```",
+    "examples": {
+      "bad": [
+        "class Person < ApplicationRecord\n  has_many :\n  ANSWER = 42\n\n  extend SomeModule\n  include AnotherModule\nend"
+      ]
+    },
+    "pars": {
+      "ExpectedOrder": [
+        "extend",
+        "include",
+        "inner_class",
+        "constant",
+        "attribute_macros",
+        "macro",
+        "public_class_method",
+        "initialize",
+        "instance_method",
+        "protected_method",
+        "private_method"
+      ],
+      "Categories": {
+        "macro": [
+          "validates",
+          "validate"
+        ],
+        "include": [
+          "prepend"
+        ],
+        "attribute_macros": [
+          "attr_accessor",
+          "attr_reader",
+          "attr_writer"
+        ]
+      }
+    },
+    "config": {
+      "Description": "Enforces a configured order of definitions within a class body.",
+      "StyleGuide": "https://github.com/bbatsov/ruby-style-guide#consistent-classes",
+      "Enabled": false,
+      "ExpectedOrder": [
+        "extend",
+        "include",
+        "inner_class",
+        "constant",
+        "attribute_macros",
+        "macro",
+        "public_class_method",
+        "initialize",
+        "instance_method",
+        "protected_method",
+        "private_method"
+      ],
+      "Categories": {
+        "macro": [
+          "validates",
+          "validate"
+        ],
+        "include": [
+          "prepend"
+        ],
+        "attribute_macros": [
+          "attr_accessor",
+          "attr_reader",
+          "attr_writer"
+        ]
+      }
+    }
+  },
+  {
+    "name": "Style/ConditionalAssignment",
+    "department": "Style",
+    "description": "Check for `if` and `case` statements where each branch is used for\nassignment to the same variable when using the return of the\ncondition can be used instead.",
+    "examples": {
+      "bad": [
+        "if foo\n  bar = 1\nelse\n  bar = 2\nend\n\ncase foo\nwhen 'a'\n  bar += 1\nelse\n  bar += 2\nend\n\nif foo\n  some_method\n  bar = 1\nelse\n  some_other_method\n  bar = 2\nend\n\nbar = if foo\n        1\n      else\n        2\n      end\n\nbar += case foo\n       when 'a'\n         1\n       else\n         2\n       end\n\nbar << if foo\n         some_method\n         1\n       else\n         some_other_method\n         2\n       end\n\n"
+      ],
+      "good": [
+        "bar = if foo\n        1\n      else\n        2\n      end\n\nbar += case foo\n       when 'a'\n         1\n       else\n         2\n       end\n\nbar << if foo\n         some_method\n         1\n       else\n         some_other_method\n         2\n       end\n\nEnforcedStyle: assign_inside_condition\nif foo\n  bar = 1\nelse\n  bar = 2\nend\n\ncase foo\nwhen 'a'\n  bar += 1\nelse\n  bar += 2\nend\n\nif foo\n  some_method\n  bar = 1\nelse\n  some_other_method\n  bar = 2\nend"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "assign_to_condition",
+      "SupportedStyles": [
+        "assign_to_condition",
+        "assign_inside_condition"
+      ],
+      "SingleLineConditionsOnly": true,
+      "IncludeTernaryExpressions": true
+    },
+    "config": {
+      "Description": "Use the return value of `if` and `case` statements for assignment to a variable and variable comparison instead of assigning that variable inside of each branch.",
+      "Enabled": true,
+      "EnforcedStyle": "assign_to_condition",
+      "SupportedStyles": [
+        "assign_to_condition",
+        "assign_inside_condition"
+      ],
+      "SingleLineConditionsOnly": true,
+      "IncludeTernaryExpressions": true
+    }
+  },
+  {
+    "name": "Style/DocumentationMethod",
+    "department": "Style",
+    "description": "This cop checks for missing documentation comment for public methods.\nIt can optionally be configured to also require documentation for\nnon-public methods.",
+    "examples": {
+      "bad": [
+        "\nclass Foo\n  def bar\n    puts baz\n  end\nend\n\nmodule Foo\n  def bar\n    puts baz\n  end\nend\n\ndef foo.bar\n  puts baz\nend\n\n"
+      ],
+      "good": [
+        "\nclass Foo\n  # Documentation\n  def bar\n    puts baz\n  end\nend\n\nmodule Foo\n  # Documentation\n  def bar\n    puts baz\n  end\nend\n\n# Documentation\ndef foo.bar\n  puts baz\nend"
+      ]
+    },
+    "pars": {
+      "Exclude": [
+        "/Users/jonatasdp/code/rubocop/spec/**/*",
+        "/Users/jonatasdp/code/rubocop/test/**/*"
+      ],
+      "RequireForNonPublicMethods": false
+    },
+    "config": {
+      "Description": "Public methods.",
+      "Enabled": false,
+      "Exclude": [
+        "/Users/jonatasdp/code/rubocop/spec/**/*",
+        "/Users/jonatasdp/code/rubocop/test/**/*"
+      ],
+      "RequireForNonPublicMethods": false
+    }
+  },
+  {
+    "name": "Style/DoubleNegation",
+    "department": "Style",
+    "description": "This cop checks for uses of double negation (!!) to convert something\nto a boolean value. As this is both cryptic and usually redundant, it\nshould be avoided.\n\nPlease, note that when something is a boolean value\n!!something and !something.nil? are not the same thing.\nAs you're unlikely to write code that can accept values of any type\nthis is rarely a problem in practice.",
+    "examples": {
+      "bad": [
+        "!!something\n\n"
+      ],
+      "good": [
+        "!something.nil?"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for uses of double negation (!!).",
+      "StyleGuide": "#no-bang-bang",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/EachForSimpleLoop",
+    "department": "Style",
+    "description": "This cop checks for loops which iterate a constant number of times,\nusing a Range literal and `#each`. This can be done more readably using\n`Integer#times`.\n\nThis check only applies if the block takes no parameters.",
+    "examples": {
+      "bad": [
+        "(1..5).each { }\n\n(0...10).each {}\n\n"
+      ],
+      "good": [
+        "5.times { }10.times {}"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `Integer#times` for a simple loop which iterates a fixed number of times.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/EachWithObject",
+    "department": "Style",
+    "description": "This cop looks for inject / reduce calls where the passed in object is\nreturned at the end and so could be replaced by each_with_object without\nthe need to return the object at the end.\n\nHowever, we can't replace with each_with_object if the accumulator\nparameter is assigned to within the block.",
+    "examples": {
+      "bad": [
+        "[1, 2].inject({}) { |a, e| a[e] = e; a }\n\n"
+      ],
+      "good": [
+        "[1, 2].each_with_object({}) { |e, a| a[e] = e }"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Prefer `each_with_object` over `inject` or `reduce`.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/EmptyCaseCondition",
+    "department": "Style",
+    "description": "This cop checks for case statements with an empty condition.",
+    "examples": {
+      "bad": [
+        "case\nwhen x == 0\n  puts 'x is 0'\nwhen y == 0\n  puts 'y is 0'\nelse\n  puts 'neither is 0'\nend\n\n"
+      ],
+      "good": [
+        "if x == 0\n  puts 'x is 0'\nelsif y == 0\n  puts 'y is 0'\nelse\n  puts 'neither is 0'\nend\n\ncase n\nwhen 0\n  puts 'zero'\nwhen 1\n  puts 'one'\nelse\n  puts 'more'\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Avoid empty condition in case statements.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/EmptyElse",
+    "department": "Style",
+    "description": "Checks for empty else-clauses, possibly including comments and/or an\nexplicit `nil` depending on the EnforcedStyle.\n\nSupportedStyles:",
+    "examples": {
+      "good": [
+        "\nif condition\n  statement\nelse\n  statement\nend\n\nif condition\n  statement\nendif condition\n  statement\nelse\n  nil\nendif condition\n  statement\nelse\nend"
+      ],
+      "bad": [
+        "if condition\n  statement\nelse\nend\n\nif condition\n  statement\nelse\n  nil\nend\n\nif condition\n  statement\nelse\n  nil\nend\n\nif condition\n  statement\nelse\nend"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "both",
+      "SupportedStyles": [
+        "empty",
+        "nil",
+        "both"
+      ]
+    },
+    "config": {
+      "Description": "Avoid empty else-clauses.",
+      "Enabled": true,
+      "EnforcedStyle": "both",
+      "SupportedStyles": [
+        "empty",
+        "nil",
+        "both"
+      ]
+    }
+  },
+  {
+    "name": "Style/EmptyMethod",
+    "department": "Style",
+    "description": "This cop checks for the formatting of empty method definitions.\nBy default it enforces empty method definitions to go on a single\nline (compact style), but it can be configured to enforce the `end`\nto go on its own line (expanded style.)\n\nNote: A method definition is not considered empty if it contains\n      comments.",
+    "examples": {
+      "bad": [
+        "def foo(bar)\nend\ndef self.foo(bar)\nend\n\ndef foo(bar); end\ndef self.foo(bar); end\n\n"
+      ],
+      "good": [
+        "def foo(bar); end\ndef foo(bar)\n  # baz\nend\ndef self.foo(bar); end\n\nEnforcedStyle: expanded\n\ndef foo(bar)\nend\ndef self.foo(bar)\nend"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "compact",
+      "SupportedStyles": [
+        "compact",
+        "expanded"
+      ]
+    },
+    "config": {
+      "Description": "Checks the formatting of empty method definitions.",
+      "StyleGuide": "#no-single-line-methods",
+      "Enabled": true,
+      "EnforcedStyle": "compact",
+      "SupportedStyles": [
+        "compact",
+        "expanded"
+      ]
+    }
+  },
+  {
+    "name": "Style/EvenOdd",
+    "department": "Style",
+    "description": "This cop checks for places where Integer#even? or Integer#odd?\nshould have been used.",
+    "examples": {
+      "bad": [
+        "if x % 2 == 0\n\n"
+      ],
+      "good": [
+        "if x.even?"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Favor the use of Integer#even? && Integer#odd?",
+      "StyleGuide": "#predicate-methods",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/GuardClause",
+    "department": "Style",
+    "description": "Use a guard clause instead of wrapping the code inside a conditional\nexpression",
+    "examples": {
+      "bad": [
+        "def test\n  if something\n    work\n  end\nend\n\nif something\n  raise 'exception'\nelse\n  ok\nend\n\n"
+      ],
+      "good": [
+        "def test\n  return unless something\n  work\nend\n\n# also good\ndef test\n  work if something\nend\n\nraise 'exception' if something\nok"
+      ]
+    },
+    "pars": {
+      "MinBodyLength": 1
+    },
+    "config": {
+      "Description": "Check for conditionals that can be replaced with guard clauses",
+      "StyleGuide": "#no-nested-conditionals",
+      "Enabled": true,
+      "MinBodyLength": 1
+    }
+  },
+  {
+    "name": "Style/HashSyntax",
+    "department": "Style",
+    "description": "This cop checks hash literal syntax.\n\nIt can enforce either the use of the class hash rocket syntax or\nthe use of the newer Ruby 1.9 syntax (when applicable).\n\nA separate offense is registered for each problematic pair.\n\nThe supported styles are:\n\n* ruby19 - forces use of the 1.9 syntax (e.g. {a: 1}) when hashes have\n  all symbols for keys\n* hash_rockets - forces use of hash rockets for all hashes\n* no_mixed_keys - simply checks for hashes with mixed syntaxes\n* ruby19_no_mixed_keys - forces use of ruby 1.9 syntax and forbids mixed\n  syntax hashes",
+    "examples": {
+      "good": [
+        "{a: 2, b: 1}\n{:c => 2, 'd' => 2} # acceptable since 'd' isn't a symbol\n{d: 1, 'e' => 2} # technically not forbidden\n\n{:a => 1, :b => 2}\n\n{:a => 1, :b => 2}\n{c: 1, d: 2}\n\n{a: 1, b: 2}\n{:c => 3, 'd' => 4}\n\n"
+      ],
+      "bad": [
+        "{:a => 2}\n{b: 1, :c => 2}{a: 1, b: 2}\n{c: 1, 'd' => 5}{:a => 1, b: 2}\n{c: 1, 'd' => 2}{:a => 1, :b => 2}\n{c: 2, 'd' => 3} # should just use hash rockets"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "ruby19",
+      "SupportedStyles": [
+        "ruby19",
+        "hash_rockets",
+        "no_mixed_keys",
+        "ruby19_no_mixed_keys"
+      ],
+      "UseHashRocketsWithSymbolValues": false,
+      "PreferHashRocketsForNonAlnumEndingSymbols": false
+    },
+    "config": {
+      "Description": "Prefer Ruby 1.9 hash syntax { a: 1, b: 2 } over 1.8 syntax { :a => 1, :b => 2 }.",
+      "StyleGuide": "#hash-literals",
+      "Enabled": true,
+      "EnforcedStyle": "ruby19",
+      "SupportedStyles": [
+        "ruby19",
+        "hash_rockets",
+        "no_mixed_keys",
+        "ruby19_no_mixed_keys"
+      ],
+      "UseHashRocketsWithSymbolValues": false,
+      "PreferHashRocketsForNonAlnumEndingSymbols": false
+    }
+  },
+  {
+    "name": "Style/IdenticalConditionalBranches",
+    "department": "Style",
+    "description": "This cop checks for identical lines at the beginning or end of\neach branch of a conditional statement.",
+    "examples": {
+      "bad": [
+        "if condition\n  do_x\n  do_z\nelse\n  do_y\n  do_z\nend\n\nif condition\n  do_z\n  do_x\nelse\n  do_z\n  do_y\nend\n\nswitch foo\nwhen 1\n  do_x\nwhen 2\n  do_x\nelse\n  do_x\nend\n\n"
+      ],
+      "good": [
+        "if condition\n  do_x\nelse\n  do_y\nend\ndo_z\n\ndo_z\nif condition\n  do_x\nelse\n  do_y\nend\n\nswitch foo\nwhen 1\n  do_x\n  do_y\nwhen 2\n  # nothing\nelse\n  do_x\n  do_z\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks that conditional statements do not have an identical line at the end of each branch, which can validly be moved out of the conditional.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/IfInsideElse",
+    "department": "Style",
+    "description": "If the `else` branch of a conditional consists solely of an `if` node,\nit can be combined with the `else` to become an `elsif`.\nThis helps to keep the nesting level from getting too deep.",
+    "examples": {
+      "good": [
+        "if condition_a\n  action_a\nelsif condition_b\n  action_b\nelse\n  action_c\nend\n\n"
+      ],
+      "bad": [
+        "if condition_a\n  action_a\nelse\n  if condition_b\n    action_b\n  else\n    action_c\n  end\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Finds if nodes inside else, which can be converted to elsif.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/IfUnlessModifierOfIfUnless",
+    "department": "Style",
+    "description": "Checks for if and unless statements used as modifiers of other if or\nunless statements.",
+    "examples": {
+      "bad": [
+        "tired? ? 'stop' : 'go faster' if running?\n\nif tired?\n  \"please stop\"\nelse\n  \"keep going\"\nend if running?\n\n"
+      ],
+      "good": [
+        "if running?\n  tired? ? 'stop' : 'go faster'\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Avoid modifier if/unless usage on conditionals.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/ImplicitRuntimeError",
+    "department": "Style",
+    "description": "This cop checks for `raise` or `fail` statements which do not specify an\nexplicit exception class. (This raises a `RuntimeError`. Some projects\nmight prefer to use exception classes which more precisely identify the\nnature of the error.)",
+    "examples": {
+      "bad": [
+        "raise 'Error message here'\n\n"
+      ],
+      "good": [
+        "raise ArgumentError, 'Error message here'"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use `raise` or `fail` with an explicit exception class and message, rather than just a message.",
+      "Enabled": false
+    }
+  },
+  {
+    "name": "Style/InfiniteLoop",
+    "department": "Style",
+    "description": "Use `Kernel#loop` for infinite loops.",
+    "examples": {
+      "bad": [
+        "while true\n  work\nend\n\n"
+      ],
+      "good": [
+        "loop do\n  work\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use Kernel#loop for infinite loops.",
+      "StyleGuide": "#infinite-loop",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/InlineComment",
+    "department": "Style",
+    "description": "This cop checks for trailing inline comments.",
+    "examples": {
+      "good": [
+        "foo.each do |f|\n  # Standalone comment\n  f.bar\nend\n\n"
+      ],
+      "bad": [
+        "foo.each do |f|\n  f.bar # Trailing inline comment\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Avoid trailing inline comments.",
+      "Enabled": false
+    }
+  },
+  {
+    "name": "Style/InverseMethods",
+    "department": "Style",
+    "description": "This cop check for usages of not (`not` or `!`) called on a method\nwhen an inverse of that method can be used instead.\nMethods that can be inverted by a not (`not` or `!`) should be defined\nin `InverseMethods`\nMethods that are inverted by inverting the return\nof the block that is passed to the method should be defined in\n`InverseBlocks`",
+    "examples": {
+      "bad": [
+        "!foo.none?\n!foo.any? { |f| f.even? }\n!foo.blank?\n!(foo == bar)\nfoo.select { |f| !f.even? }\nfoo.reject { |f| f != 7 }\n\n"
+      ],
+      "good": [
+        "foo.none?\nfoo.blank?\nfoo.any? { |f| f.even? }\nfoo != bar\nfoo == bar"
+      ]
+    },
+    "pars": {
+      "InverseMethods": {
+        "any?": "none?",
+        "even?": "odd?",
+        "==": "!=",
+        "=~": "!~",
+        "<": ">=",
+        ">": "<="
+      },
+      "InverseBlocks": {
+        "select": "reject",
+        "select!": "reject!"
+      }
+    },
+    "config": {
+      "Description": "Use the inverse method instead of `!.method` if an inverse method is defined.",
+      "Enabled": true,
+      "InverseMethods": {
+        "any?": "none?",
+        "even?": "odd?",
+        "==": "!=",
+        "=~": "!~",
+        "<": ">=",
+        ">": "<="
+      },
+      "InverseBlocks": {
+        "select": "reject",
+        "select!": "reject!"
+      }
+    }
+  },
+  {
+    "name": "Style/Lambda",
+    "department": "Style",
+    "description": "This cop (by default) checks for uses of the lambda literal syntax for\nsingle line lambdas, and the method call syntax for multiline lambdas.\nIt is configurable to enforce one of the styles for both single line\nand multiline lambdas as well.",
+    "examples": {
+      "bad": [
+        "f = lambda { |x| x }\nf = ->(x) do\n      x\n    end\n\nf = ->(x) { x }\nf = ->(x) do\n      x\n    end\n\nf = lambda { |x| x }\nf = lambda do |x|\n      x\n    end\n\n"
+      ],
+      "good": [
+        "f = ->(x) { x }\nf = lambda do |x|\n      x\n    endf = lambda { |x| x }\nf = lambda do |x|\n      x\n    endf = ->(x) { x }\nf = ->(x) do\n      x\n    end"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "line_count_dependent",
+      "SupportedStyles": [
+        "line_count_dependent",
+        "lambda",
+        "literal"
+      ]
+    },
+    "config": {
+      "Description": "Use the new lambda literal syntax for single-line blocks.",
+      "StyleGuide": "#lambda-multi-line",
+      "Enabled": true,
+      "EnforcedStyle": "line_count_dependent",
+      "SupportedStyles": [
+        "line_count_dependent",
+        "lambda",
+        "literal"
+      ]
+    }
+  },
+  {
+    "name": "Style/LambdaCall",
+    "department": "Style",
+    "description": "This cop checks for use of the lambda.(args) syntax.",
+    "examples": {
+      "bad": [
+        "lambda.(x, y)\n\n"
+      ],
+      "good": [
+        "lambda.call(x, y)"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "call",
+      "SupportedStyles": [
+        "call",
+        "braces"
+      ]
+    },
+    "config": {
+      "Description": "Use lambda.call(...) instead of lambda.(...).",
+      "StyleGuide": "#proc-call",
+      "Enabled": true,
+      "EnforcedStyle": "call",
+      "SupportedStyles": [
+        "call",
+        "braces"
+      ]
+    }
+  },
+  {
+    "name": "Style/LineEndConcatenation",
+    "department": "Style",
+    "description": "This cop checks for string literal concatenation at\nthe end of a line.",
+    "examples": {
+      "bad": [
+        "some_str = 'ala' +\n           'bala'\n\nsome_str = 'ala' <<\n           'bala'\n\n"
+      ],
+      "good": [
+        "some_str = 'ala' \\\n           'bala'"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use \\ instead of + or << to concatenate two string literals at line end.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/MethodCallWithArgsParentheses",
+    "department": "Style",
+    "description": "This cop checks presence of parentheses in method calls containing\nparameters. By default, macro methods are ignored. Additional methods\ncan be added to the `IgnoredMethods` list.",
+    "examples": {
+      "bad": [
+        "array.delete e\n\nclass Foo\n  bar :baz\nend"
+      ],
+      "good": [
+        "array.delete(e)\n\n# Operators don't need parens\nfoo == bar\n\n# Setter methods don't need parens\nfoo.bar = baz\n\n# okay with `puts` listed in `IgnoredMethods`\nputs 'test'\n\n# IgnoreMacros: true (default)\n\nclass Foo\n  bar :baz\nend\n\n# IgnoreMacros: false\n\n"
+      ]
+    },
+    "pars": {
+      "IgnoreMacros": true,
+      "IgnoredMethods": [
+
+      ]
+    },
+    "config": {
+      "Description": "Use parentheses for method calls with arguments.",
+      "StyleGuide": "#method-invocation-parens",
+      "Enabled": false,
+      "IgnoreMacros": true,
+      "IgnoredMethods": [
+
+      ]
+    }
+  },
+  {
+    "name": "Style/MethodCallWithoutArgsParentheses",
+    "department": "Style",
+    "description": "This cop checks for unwanted parentheses in parameterless method calls.",
+    "examples": {
+      "bad": [
+        "object.some_method()\n\n"
+      ],
+      "good": [
+        "object.some_method"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Do not use parentheses for method calls with no arguments.",
+      "StyleGuide": "#method-invocation-parens",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/MissingElse",
+    "department": "Style",
+    "description": "Checks for `if` expressions that do not have an `else` branch.\nSupportedStyles\n\nif\ncase",
+    "examples": {
+      "bad": [
+        "if condition\n  statement\nendcase var\nwhen condition\n  statement\nend"
+      ],
+      "good": [
+        "if condition\n  statement\nelse\n# the content of the else branch will be determined by Style/EmptyElse\nend"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "both",
+      "SupportedStyles": [
+        "if",
+        "case",
+        "both"
+      ]
+    },
+    "config": {
+      "Description": "Require if/case expressions to have an else branches. If enabled, it is recommended that Style/UnlessElse and Style/EmptyElse be enabled. This will conflict with Style/EmptyElse if Style/EmptyElse is configured to style \"both\"",
+      "Enabled": false,
+      "EnforcedStyle": "both",
+      "SupportedStyles": [
+        "if",
+        "case",
+        "both"
+      ]
+    }
+  },
+  {
+    "name": "Style/MixinGrouping",
+    "department": "Style",
+    "description": "This cop checks for grouping of mixins in `class` and `module` bodies.\nBy default it enforces mixins to be placed in separate declarations,\nbut it can be configured to enforce grouping them in one declaration.",
+    "examples": {
+      "bad": [
+        "class Foo\n  include Bar, Qox\nend\n\nclass Foo\n  extend Bar\n  extend Qox\nend\n\n"
+      ],
+      "good": [
+        "class Foo\n  include Qox\n  include Bar\nend\n\nEnforcedStyle: grouped\n\nclass Foo\n  extend Qox, Bar\nend"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "separated",
+      "SupportedStyles": [
+        "separated",
+        "grouped"
+      ]
+    },
+    "config": {
+      "Description": "Checks for grouping of mixins in `class` and `module` bodies.",
+      "StyleGuide": "#mixin-grouping",
+      "Enabled": true,
+      "EnforcedStyle": "separated",
+      "SupportedStyles": [
+        "separated",
+        "grouped"
+      ]
+    }
+  },
+  {
+    "name": "Style/MultilineIfModifier",
+    "department": "Style",
+    "description": "Checks for uses of if/unless modifiers with multiple-lines bodies.",
+    "examples": {
+      "bad": [
+        "{\n  result: 'this should not happen'\n} unless cond\n\n"
+      ],
+      "good": [
+        "{ result: 'ok' } if cond"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Only use if/unless modifiers on single line statements.",
+      "StyleGuide": "#no-multiline-if-modifiers",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/MultilineMemoization",
+    "department": "Style",
+    "description": "This cop checks expressions wrapping styles for multiline memoization.",
+    "examples": {
+      "bad": [
+        "foo ||= (\n  bar\n  baz\n)\n\nfoo ||= begin\n  bar\n  baz\nend\n\n"
+      ],
+      "good": [
+        "foo ||= begin\n  bar\n  baz\nendfoo ||= (\n  bar\n  baz\n)"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "keyword",
+      "SupportedStyles": [
+        "keyword",
+        "braces"
+      ]
+    },
+    "config": {
+      "Description": "Wrap multiline memoizations in a `begin` and `end` block.",
+      "Enabled": true,
+      "EnforcedStyle": "keyword",
+      "SupportedStyles": [
+        "keyword",
+        "braces"
+      ]
+    }
+  },
+  {
+    "name": "Style/MutableConstant",
+    "department": "Style",
+    "description": "This cop checks whether some constant value isn't a\nmutable literal (e.g. array or hash).",
+    "examples": {
+      "bad": [
+        "CONST = [1, 2, 3]\n\n"
+      ],
+      "good": [
+        "CONST = [1, 2, 3].freeze"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Do not assign mutable objects to constants.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/NegatedIf",
+    "department": "Style",
+    "description": "Checks for uses of if with a negated condition. Only ifs\nwithout else are considered. There are three different styles:\n\n  - both\n  - prefix\n  - postfix",
+    "examples": {
+      "good": [
+        "\nunless foo\n  bar\nend\n\n\nbar unless foo\n\n\nunless foo\n  bar\nend\n\n\nbar if !foo\nbar unless foo\n\n\nif !foo\n  bar\nend"
+      ],
+      "bad": [
+        "\nif !foo\n  bar\nend\n\n\nbar if !foo\nif !foo\n  bar\nend\n\n\nbar if !foo\n\n"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "both",
+      "SupportedStyles": [
+        "both",
+        "prefix",
+        "postfix"
+      ]
+    },
+    "config": {
+      "Description": "Favor unless over if for negative conditions (or control flow or).",
+      "StyleGuide": "#unless-for-negatives",
+      "Enabled": true,
+      "EnforcedStyle": "both",
+      "SupportedStyles": [
+        "both",
+        "prefix",
+        "postfix"
+      ]
+    }
+  },
+  {
+    "name": "Style/NestedModifier",
+    "department": "Style",
+    "description": "This cop checks for nested use of if, unless, while and until in their\nmodifier form.",
+    "examples": {
+      "bad": [
+        "something if a if b\n\n"
+      ],
+      "good": [
+        "something if b && a"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Avoid using nested modifiers.",
+      "StyleGuide": "#no-nested-modifiers",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/NestedParenthesizedCalls",
+    "department": "Style",
+    "description": "This cop checks for unparenthesized method calls in the argument list\nof a parenthesized method call.",
+    "examples": {
+      "good": [
+        "method1(method2(arg), method3(arg))\n\n"
+      ],
+      "bad": [
+        "method1(method2 arg, method3, arg)"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Parenthesize method calls which are nested inside the argument list of another parenthesized method call.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/Next",
+    "department": "Style",
+    "description": "Use `next` to skip iteration instead of a condition at the end.",
+    "examples": {
+      "bad": [
+        "[1, 2].each do |a|\n  if a == 1 do\n    puts a\n  end\nend\n\n"
+      ],
+      "good": [
+        "[1, 2].each do |a|\n  next unless a == 1\n  puts a\nend"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "skip_modifier_ifs",
+      "MinBodyLength": 3,
+      "SupportedStyles": [
+        "skip_modifier_ifs",
+        "always"
+      ]
+    },
+    "config": {
+      "Description": "Use `next` to skip iteration instead of a condition at the end.",
+      "StyleGuide": "#no-nested-conditionals",
+      "Enabled": true,
+      "EnforcedStyle": "skip_modifier_ifs",
+      "MinBodyLength": 3,
+      "SupportedStyles": [
+        "skip_modifier_ifs",
+        "always"
+      ]
+    }
+  },
+  {
+    "name": "Style/NilComparison",
+    "department": "Style",
+    "description": "This cop checks for comparison of something with nil using ==.",
+    "examples": {
+      "bad": [
+        "if x == nil\n\n"
+      ],
+      "good": [
+        "if x.nil?"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Prefer x.nil? to x == nil.",
+      "StyleGuide": "#predicate-methods",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/NonNilCheck",
+    "department": "Style",
+    "description": "This cop checks for non-nil checks, which are usually redundant.\n\nNon-nil checks are allowed if they are the final nodes of predicate.\n\n # good\n def signed_in?\n   !current_user.nil?\n end",
+    "examples": {
+      "bad": [
+        "if x != nil\n\nif !x.nil?\n\n"
+      ],
+      "good": [
+        "if x"
+      ]
+    },
+    "pars": {
+      "IncludeSemanticChanges": false
+    },
+    "config": {
+      "Description": "Checks for redundant nil checks.",
+      "StyleGuide": "#no-non-nil-checks",
+      "Enabled": true,
+      "IncludeSemanticChanges": false
+    }
+  },
+  {
+    "name": "Style/NumericLiterals",
+    "department": "Style",
+    "description": "This cop checks for big numeric literals without _ between groups\nof digits in them.",
+    "examples": {
+      "bad": [
+        "\n1000000\n1_00_000\n1_0000\n\n"
+      ],
+      "good": [
+        "\n1_000_000\n1000\n\n\n10_000_00 # typical representation of $10,000 in cents"
+      ]
+    },
+    "pars": {
+      "MinDigits": 5,
+      "Strict": false
+    },
+    "config": {
+      "Description": "Add underscores to large numeric literals to improve their readability.",
+      "StyleGuide": "#underscores-in-numerics",
+      "Enabled": true,
+      "MinDigits": 5,
+      "Strict": false
+    }
+  },
+  {
+    "name": "Style/NumericPredicate",
+    "department": "Style",
+    "description": "This cop checks for usage of comparison operators (`==`,\n`>`, `<`) to test numbers as zero, positive, or negative.\nThese can be replaced by their respective predicate methods.\nThe cop can also be configured to do the reverse.\n\nThe cop disregards `nonzero?` as it its value is truthy or falsey,\nbut not `true` and `false`, and thus not always interchangeable with\n`!= 0`.",
+    "examples": {
+      "bad": [
+        "\nfoo == 0\n0 > foo\nbar.baz > 0\n\n\nfoo.zero?\nfoo.negative?\nbar.baz.positive?\n\n"
+      ],
+      "good": [
+        "\nfoo.zero?\nfoo.negative?\nbar.baz.positive?\nfoo == 0\n0 > foo\nbar.baz > 0"
+      ]
+    },
+    "pars": {
+      "AutoCorrect": false,
+      "EnforcedStyle": "predicate",
+      "SupportedStyles": [
+        "predicate",
+        "comparison"
+      ],
+      "Exclude": [
+        "/Users/jonatasdp/code/rubocop/spec/**/*"
+      ]
+    },
+    "config": {
+      "Description": "Checks for the use of predicate- or comparison methods for numeric comparisons.",
+      "StyleGuide": "#predicate-methods",
+      "AutoCorrect": false,
+      "Enabled": true,
+      "EnforcedStyle": "predicate",
+      "SupportedStyles": [
+        "predicate",
+        "comparison"
+      ],
+      "Exclude": [
+        "/Users/jonatasdp/code/rubocop/spec/**/*"
+      ]
+    }
+  },
+  {
+    "name": "Style/OpMethod",
+    "department": "Style",
+    "description": "This cop makes sure that certain binary operator methods have their\nsole  parameter named `other`.",
+    "examples": {
+      "bad": [
+        "def +(amount); end\n\n"
+      ],
+      "good": [
+        "def +(other); end"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "When defining binary operators, name the argument other.",
+      "StyleGuide": "#other-arg",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/OptionalArguments",
+    "department": "Style",
+    "description": "This cop checks for optional arguments to methods\nthat do not come at the end of the argument list",
+    "examples": {
+      "bad": [
+        "def foo(a = 1, b, c)\nend\n\n"
+      ],
+      "good": [
+        "def baz(a, b, c = 1)\nend\n\ndef foobar(a = 1, b = 2, c = 3)\nend"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for optional arguments that do not appear at the end of the argument list",
+      "StyleGuide": "#optional-arguments",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/ParallelAssignment",
+    "department": "Style",
+    "description": "Checks for simple usages of parallel assignment.\nThis will only complain when the number of variables\nbeing assigned matched the number of assigning variables.",
+    "examples": {
+      "bad": [
+        "a, b, c = 1, 2, 3\na, b, c = [1, 2, 3]\n\n"
+      ],
+      "good": [
+        "one, two = *foo\na, b = foo()\na, b = b, a\n\na = 1\nb = 2\nc = 3"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Check for simple usages of parallel assignment. It will only warn when the number of variables matches on both sides of the assignment.",
+      "StyleGuide": "#parallel-assignment",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/PercentLiteralDelimiters",
+    "department": "Style",
+    "description": "This cop enforces the consistent usage of `%`-literal delimiters.\n\nSpecify the 'default' key to set all preferred delimiters at once. You\ncan continue to specify individual preferred delimiters to override the\ndefault.",
+    "examples": {
+      "good": [
+        "%w[alpha beta] + %i(gamma delta)\n\n"
+      ],
+      "bad": [
+        "%W(alpha #{beta})\n\n%I(alpha beta)"
+      ]
+    },
+    "pars": {
+      "PreferredDelimiters": {
+        "default": "()",
+        "%i": "[]",
+        "%I": "[]",
+        "%r": "{}",
+        "%w": "[]",
+        "%W": "[]"
+      }
+    },
+    "config": {
+      "Description": "Use `%`-literal delimiters consistently",
+      "StyleGuide": "#percent-literal-braces",
+      "Enabled": true,
+      "PreferredDelimiters": {
+        "default": "()",
+        "%i": "[]",
+        "%I": "[]",
+        "%r": "{}",
+        "%w": "[]",
+        "%W": "[]"
+      }
+    }
+  },
+  {
+    "name": "Style/PredicateName",
+    "department": "Style",
+    "description": "This cop makes sure that predicates are named properly.",
+    "examples": {
+      "bad": [
+        "def is_even?(value) ...\n\ndef has_value? ...\n\n"
+      ],
+      "good": [
+        "def even?(value)\n\ndef value? ..."
+      ]
+    },
+    "pars": {
+      "NamePrefix": [
+        "is_",
+        "has_",
+        "have_"
+      ],
+      "NamePrefixBlacklist": [
+        "is_",
+        "has_",
+        "have_"
+      ],
+      "NameWhitelist": [
+        "is_a?"
+      ],
+      "Exclude": [
+        "/Users/jonatasdp/code/rubocop/spec/**/*"
+      ]
+    },
+    "config": {
+      "Description": "Check the names of predicate methods.",
+      "StyleGuide": "#bool-methods-qmark",
+      "Enabled": true,
+      "NamePrefix": [
+        "is_",
+        "has_",
+        "have_"
+      ],
+      "NamePrefixBlacklist": [
+        "is_",
+        "has_",
+        "have_"
+      ],
+      "NameWhitelist": [
+        "is_a?"
+      ],
+      "Exclude": [
+        "/Users/jonatasdp/code/rubocop/spec/**/*"
+      ]
+    }
+  },
+  {
+    "name": "Style/PreferredHashMethods",
+    "department": "Style",
+    "description": "This cop (by default) checks for uses of methods Hash#has_key? and\nHash#has_value? where it enforces Hash#key? and Hash#value?\nIt is configurable to enforce the inverse, using `verbose` method\nnames also.",
+    "examples": {
+      "bad": [
+        "Hash#has_key?\nHash#has_value?\n\nHash#key?\nHash#value?\n\n"
+      ],
+      "good": [
+        "Hash#key?\nHash#value?Hash#has_key?\nHash#has_value?"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "short",
+      "SupportedStyles": [
+        "short",
+        "verbose"
+      ]
+    },
+    "config": {
+      "Description": "Checks use of `has_key?` and `has_value?` Hash methods.",
+      "StyleGuide": "#hash-key",
+      "Enabled": true,
+      "EnforcedStyle": "short",
+      "SupportedStyles": [
+        "short",
+        "verbose"
+      ]
+    }
+  },
+  {
+    "name": "Style/RaiseArgs",
+    "department": "Style",
+    "description": "This cop checks the args passed to `fail` and `raise`. For exploded\nstyle (default), it recommends passing the exception class and message\nto `raise`, rather than construct an instance of the error. It will\nstill allow passing just a message, or the construction of an error\nwith more than one argument.\n\nThe exploded style works identically, but with the addition that it\nwill also suggest constructing error objects when the exception is\npassed multiple arguments.",
+    "examples": {
+      "bad": [
+        "raise StandardError.new(\"message\")\n\nraise StandardError, \"message\"\nraise RuntimeError, arg1, arg2, arg3\n\n"
+      ],
+      "good": [
+        "raise StandardError, \"message\"\nfail \"message\"\nraise MyCustomError.new(arg1, arg2, arg3)\nraise MyKwArgError.new(key1: val1, key2: val2)raise StandardError.new(\"message\")\nraise MyCustomError.new(arg1, arg2, arg3)\nfail \"message\""
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "exploded",
+      "SupportedStyles": [
+        "compact",
+        "exploded"
+      ]
+    },
+    "config": {
+      "Description": "Checks the arguments passed to raise/fail.",
+      "StyleGuide": "#exception-class-messages",
+      "Enabled": true,
+      "EnforcedStyle": "exploded",
+      "SupportedStyles": [
+        "compact",
+        "exploded"
+      ]
+    }
+  },
+  {
+    "name": "Style/RedundantFreeze",
+    "department": "Style",
+    "description": "This cop check for uses of Object#freeze on immutable objects.",
+    "examples": {
+      "bad": [
+        "CONST = 1.freeze\n\n"
+      ],
+      "good": [
+        "CONST = 1"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks usages of Object#freeze on immutable objects.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/RedundantParentheses",
+    "department": "Style",
+    "description": "This cop checks for redundant parentheses.",
+    "examples": {
+      "bad": [
+        "(x) if ((y.z).nil?)\n\n"
+      ],
+      "good": [
+        "x if y.z.nil?"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for parentheses that seem not to serve any purpose.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/SafeNavigation",
+    "department": "Style",
+    "description": "This cop transforms usages of a method call safeguarded by a non `nil`\ncheck for the variable whose method is being called to\nsafe navigation (`&.`).\n\nConfiguration option: ConvertCodeThatCanStartToReturnNil\nThe default for this is `false`. When configured to `true`, this will\ncheck for code in the format `!foo.nil? && foo.bar`. As it is written,\nthe return of this code is limited to `false` and whatever the return\nof the method is. If this is converted to safe navigation,\n`foo&.bar` can start returning `nil` as well as what the method\nreturns.",
+    "examples": {
+      "bad": [
+        "foo.bar if foo\nfoo.bar(param1, param2) if foo\nfoo.bar { |e| e.something } if foo\nfoo.bar(param) { |e| e.something } if foo\n\nfoo.bar if !foo.nil?\nfoo.bar unless !foo\nfoo.bar unless foo.nil?\n\nfoo && foo.bar\nfoo && foo.bar(param1, param2)\nfoo && foo.bar { |e| e.something }\nfoo && foo.bar(param) { |e| e.something }\n\n"
+      ],
+      "good": [
+        "foo&.bar\nfoo&.bar(param1, param2)\nfoo&.bar { |e| e.something }\nfoo&.bar(param) { |e| e.something }\n\nfoo.nil? || foo.bar\n!foo || foo.bar\n\n# Methods that `nil` will `respond_to?` should not be converted to\n# use safe navigation\nfoo.to_i if foo"
+      ]
+    },
+    "pars": {
+      "ConvertCodeThatCanStartToReturnNil": false
+    },
+    "config": {
+      "Description": "This cop transforms usages of a method call safeguarded by a check for the existance of the object to safe navigation (`&.`).",
+      "Enabled": true,
+      "ConvertCodeThatCanStartToReturnNil": false
+    }
+  },
+  {
+    "name": "Style/SelfAssignment",
+    "department": "Style",
+    "description": "This cop enforces the use the shorthand for self-assignment.",
+    "examples": {
+      "bad": [
+        "x = x + 1\n\n"
+      ],
+      "good": [
+        "x += 1"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for places where self-assignment shorthand should have been used.",
+      "StyleGuide": "#self-assignment",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/StructInheritance",
+    "department": "Style",
+    "description": "This cop checks for inheritance from Struct.new.",
+    "examples": {
+      "bad": [
+        "class Person < Struct.new(:first_name, :last_name)\nend\n\n"
+      ],
+      "good": [
+        "Person = Struct.new(:first_name, :last_name)"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for inheritance from Struct.new.",
+      "StyleGuide": "#no-extend-struct-new",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/SymbolArray",
+    "department": "Style",
+    "description": "This cop can check for array literals made up of symbols that are not\nusing the %i() syntax.\n\nAlternatively, it checks for symbol arrays using the %i() syntax on\nprojects which do not want to use that syntax, perhaps because they\nsupport a version of Ruby lower than 2.0.\n\nConfiguration option: MinSize\nIf set, arrays with fewer elements than this value will not trigger the\ncop. For example, a `MinSize of `3` will not enforce a style on an array\nof 2 or fewer elements.",
+    "examples": {
+      "good": [
+        "%i[foo bar baz]\n\n[:foo, :bar, :baz]\n\n"
+      ],
+      "bad": [
+        "[:foo, :bar, :baz]%i[foo bar baz]"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "percent",
+      "MinSize": 0,
+      "SupportedStyles": [
+        "percent",
+        "brackets"
+      ]
+    },
+    "config": {
+      "Description": "Use %i or %I for arrays of symbols.",
+      "StyleGuide": "#percent-i",
+      "Enabled": true,
+      "EnforcedStyle": "percent",
+      "MinSize": 0,
+      "SupportedStyles": [
+        "percent",
+        "brackets"
+      ]
+    }
+  },
+  {
+    "name": "Style/SymbolLiteral",
+    "department": "Style",
+    "description": "This cop checks symbol literal syntax.",
+    "examples": {
+      "bad": [
+        ":\"symbol\"\n\n"
+      ],
+      "good": [
+        ":symbol"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use plain symbols instead of string symbols when possible.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/SymbolProc",
+    "department": "Style",
+    "description": "Use symbols as procs when possible.",
+    "examples": {
+      "bad": [
+        "something.map { |s| s.upcase }\n\n"
+      ],
+      "good": [
+        "something.map(&:upcase)"
+      ]
+    },
+    "pars": {
+      "IgnoredMethods": [
+        "respond_to",
+        "define_method"
+      ]
+    },
+    "config": {
+      "Description": "Use symbols as procs instead of blocks when possible.",
+      "Enabled": true,
+      "IgnoredMethods": [
+        "respond_to",
+        "define_method"
+      ]
+    }
+  },
+  {
+    "name": "Style/TernaryParentheses",
+    "department": "Style",
+    "description": "This cop checks for the presence of parentheses around ternary\nconditions. It is configurable to enforce inclusion or omission of\nparentheses using `EnforcedStyle`. Omission is only enforced when\nremoving the parentheses won't cause a different behavior.",
+    "examples": {
+      "bad": [
+        "foo = (bar?) ? a : b\nfoo = (bar.baz?) ? a : b\nfoo = (bar && baz) ? a : b\n\nfoo = bar? ? a : b\nfoo = bar.baz? ? a : b\nfoo = bar && baz ? a : b\n\nfoo = (bar?) ? a : b\nfoo = (bar.baz?) ? a : b\nfoo = bar && baz ? a : b\n\n"
+      ],
+      "good": [
+        "foo = bar? ? a : b\nfoo = bar.baz? ? a : b\nfoo = bar && baz ? a : bfoo = (bar?) ? a : b\nfoo = (bar.baz?) ? a : b\nfoo = (bar && baz) ? a : bfoo = bar? ? a : b\nfoo = bar.baz? ? a : b\nfoo = (bar && baz) ? a : b"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "require_no_parentheses",
+      "SupportedStyles": [
+        "require_parentheses",
+        "require_no_parentheses",
+        "require_parentheses_when_complex"
+      ],
+      "AllowSafeAssignment": true
+    },
+    "config": {
+      "Description": "Checks for use of parentheses around ternary conditions.",
+      "Enabled": true,
+      "EnforcedStyle": "require_no_parentheses",
+      "SupportedStyles": [
+        "require_parentheses",
+        "require_no_parentheses",
+        "require_parentheses_when_complex"
+      ],
+      "AllowSafeAssignment": true
+    }
+  },
+  {
+    "name": "Style/TrailingCommaInArguments",
+    "department": "Style",
+    "description": "This cop checks for trailing comma in argument lists.",
+    "examples": {
+      "good": [
+        "method(\n  1, 2,\n  3,\n)\n\nmethod(\n  1,\n  2,\n)\n\nmethod(\n  1,\n  2\n)"
+      ]
+    },
+    "pars": {
+      "EnforcedStyleForMultiline": "no_comma",
+      "SupportedStylesForMultiline": [
+        "comma",
+        "consistent_comma",
+        "no_comma"
+      ]
+    },
+    "config": {
+      "Description": "Checks for trailing comma in argument lists.",
+      "StyleGuide": "#no-trailing-params-comma",
+      "Enabled": true,
+      "EnforcedStyleForMultiline": "no_comma",
+      "SupportedStylesForMultiline": [
+        "comma",
+        "consistent_comma",
+        "no_comma"
+      ]
+    }
+  },
+  {
+    "name": "Style/TrailingCommaInLiteral",
+    "department": "Style",
+    "description": "This cop checks for trailing comma in array and hash literals.",
+    "examples": {
+      "good": [
+        "a = [\n  1, 2,\n  3,\n]\n\na = [\n  1,\n  2,\n]\n\na = [\n  1,\n  2\n]"
+      ]
+    },
+    "pars": {
+      "EnforcedStyleForMultiline": "no_comma",
+      "SupportedStylesForMultiline": [
+        "comma",
+        "consistent_comma",
+        "no_comma"
+      ]
+    },
+    "config": {
+      "Description": "Checks for trailing comma in array and hash literals.",
+      "StyleGuide": "#no-trailing-array-commas",
+      "Enabled": true,
+      "EnforcedStyleForMultiline": "no_comma",
+      "SupportedStylesForMultiline": [
+        "comma",
+        "consistent_comma",
+        "no_comma"
+      ]
+    }
+  },
+  {
+    "name": "Style/TrailingUnderscoreVariable",
+    "department": "Style",
+    "description": "This cop checks for extra underscores in variable assignment.",
+    "examples": {
+      "bad": [
+        "a, b, _ = foo()\na, b, _, = foo()\na, _, _ = foo()\na, _, _, = foo()\n\n"
+      ],
+      "good": [
+        "a, b, = foo()\na, = foo()\n*a, b, _ = foo()  => We need to know to not include 2 variables in a\na, *b, _ = foo()  => The correction `a, *b, = foo()` is a syntax error\n\na, b, _something = foo()"
+      ]
+    },
+    "pars": {
+      "AllowNamedUnderscoreVariables": true
+    },
+    "config": {
+      "Description": "Checks for the usage of unneeded trailing underscores at the end of parallel variable assignment.",
+      "AllowNamedUnderscoreVariables": true,
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/UnneededInterpolation",
+    "department": "Style",
+    "description": "This cop checks for strings that are just an interpolated expression.",
+    "examples": {
+      "bad": [
+        "\"#{@var}\"\n\n"
+      ],
+      "good": [
+        "@var.to_s\n\n@var"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Checks for strings that are just an interpolated expression.",
+      "Enabled": true
+    }
+  },
+  {
+    "name": "Style/VariableNumber",
+    "department": "Style",
+    "description": "This cop makes sure that all numbered variables use the\nconfigured style, snake_case, normalcase or non_integer,\nfor their numbering.",
+    "examples": {
+      "bad": [
+        "\nvariable1 = 1\n\n\nvariable_1 = 1\n\n"
+      ],
+      "good": [
+        "\nvariable_1 = 1\nvariable1 = 1"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "normalcase",
+      "SupportedStyles": [
+        "snake_case",
+        "normalcase",
+        "non_integer"
+      ]
+    },
+    "config": {
+      "Description": "Use the configured style when numbering variables.",
+      "Enabled": true,
+      "EnforcedStyle": "normalcase",
+      "SupportedStyles": [
+        "snake_case",
+        "normalcase",
+        "non_integer"
+      ]
+    }
+  },
+  {
+    "name": "Style/WordArray",
+    "department": "Style",
+    "description": "This cop can check for array literals made up of word-like\nstrings, that are not using the %w() syntax.\n\nAlternatively, it can check for uses of the %w() syntax, in projects\nwhich do not want to include that syntax.\n\nConfiguration option: MinSize\nIf set, arrays with fewer elements than this value will not trigger the\ncop. For example, a `MinSize of `3` will not enforce a style on an array\nof 2 or fewer elements.",
+    "examples": {
+      "good": [
+        "%w[foo bar baz]\n\n['foo', 'bar', 'baz']\n\n"
+      ],
+      "bad": [
+        "['foo', 'bar', 'baz']%w[foo bar baz]"
+      ]
+    },
+    "pars": {
+      "EnforcedStyle": "percent",
+      "SupportedStyles": [
+        "percent",
+        "brackets"
+      ],
+      "MinSize": 0,
+      "WordRegex": "(?-mix:\\A[\\p{Word}\\n\\t]+\\z)"
+    },
+    "config": {
+      "Description": "Use %w or %W for arrays of words.",
+      "StyleGuide": "#percent-w",
+      "Enabled": true,
+      "EnforcedStyle": "percent",
+      "SupportedStyles": [
+        "percent",
+        "brackets"
+      ],
+      "MinSize": 0,
+      "WordRegex": "(?-mix:\\A[\\p{Word}\\n\\t]+\\z)"
+    }
+  },
+  {
+    "name": "Style/ZeroLengthPredicate",
+    "department": "Style",
+    "description": "This cop checks for numeric comparisons that can be replaced\nby a predicate method, such as receiver.length == 0,\nreceiver.length > 0, receiver.length != 0,\nreceiver.length < 1 and receiver.size == 0 that can be\nreplaced by receiver.empty? and !receiver.empty.",
+    "examples": {
+      "bad": [
+        "[1, 2, 3].length == 0\n0 == \"foobar\".length\narray.length < 1\n{a: 1, b: 2}.length != 0\nstring.length > 0\nhash.size > 0\n\n"
+      ],
+      "good": [
+        "[1, 2, 3].empty?\n\"foobar\".empty?\narray.empty?\n!{a: 1, b: 2}.empty?\n!string.empty?\n!hash.empty?"
+      ]
+    },
+    "pars": {
+    },
+    "config": {
+      "Description": "Use #empty? when testing for objects of length 0.",
+      "Enabled": true
+    }
+  }
+]
