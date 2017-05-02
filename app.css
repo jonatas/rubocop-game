@@ -1,0 +1,29 @@
+
+.bar {
+    display: block;
+    position: fixed 0 0;
+}
+
+.bar > .score {
+
+
+}
+
+.bar > .results {
+    padding: 10px;
+}
+
+.bar > .results > .result {
+    display: block;
+    float: left;
+    width: 10px;
+    height: 10px;
+}
+
+.bar > .results > .result.error {
+    background-color: red;
+}
+
+.bar > .results > .result.success {
+    background-color: green;
+}

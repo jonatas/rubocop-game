@@ -1,0 +1,31 @@
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link href="prism.css" rel="stylesheet" />
+  <link href="app.css" rel="stylesheet" />
+  <script src="prism.js"></script>
+  <script type="text/javascript" charset="utf-8" src="app.js">
+  </script>
+  <title>Are you a true RuboCop?</title>
+</head>
+<body>
+  <button id="start" onclick="app.play()">Play Game</button>
+  <div class="bar">
+    <div class="results"></div>
+    <div class="score"></div>
+  </div>
+  <div id="game">
+    <h1 id="title">Good or Bad?</h1>
+    <pre id="code">
+    </pre>
+    <button onclick="app.good()" id="good">Good</button>
+    <button onclick="app.bad()" id="bad">Bad</button>
+    <div id="help">
+      <hr />
+      <p id="help-message"></p>
+      <a href="#" id="official_documentation" target="_blank">Read more</a>
+    </div>
+  </div>
+</body>
+</html>
